@@ -1,0 +1,30 @@
+import React from 'react'
+import Form from '../../components/UI/Form'
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useAuthorization } from '../../stores/authorization';
+import { useNavigate } from 'react-router-dom';
+
+const RegistaerPage = () => {
+
+  const register = useAuthorization(state => state.setUser)
+
+  const push = useNavigate()
+
+  const handleClickRegister = (email:string, password:string) => {
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+        .then(({user}) => {
+          register(user.email, user.uid)
+          push('/')
+        })
+        .catch(console.error)
+  }
+
+  return (
+    <div>
+        <Form loginPage={false} handleClick={handleClickRegister} title='Registration' underText={`Already have an account?`} underText2='Log in' link={'authorization'}/>
+    </div>
+  )
+}
+
+export default RegistaerPage
