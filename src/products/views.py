@@ -2,6 +2,7 @@ from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework.authentication import *
+from rest_framework.views import APIView
 from rest_framework.viewsets import *
 from django.urls import reverse, resolve
 
