@@ -7,11 +7,15 @@ from .views import (MainAPIView,
                     CartAPIView, 
                     OrderAPIView, 
                     OrderItemAPIView, 
+                    HoodiesListAPIView, 
+                    SneakersListAPIView, 
                     AddBasketItemAPIView)
 
 
 urlpatterns = [
     path('', MainAPIView.as_view(), name='main'),
+    path('products/hoodies/', HoodiesListAPIView.as_view(), name='product-hoodies'),
+    path('products/sneakers/', SneakersListAPIView.as_view(), name='product-sneakers'),
     path('products/<str:title>/', ProductDetailAPIView.as_view(), name='product-detail'),
     path('favorites/', FavoritesAPIView.as_view(), name='favorites'),
     path('favorites/add/', AddFavotiteAPIView.as_view(), name='add-favorite'),

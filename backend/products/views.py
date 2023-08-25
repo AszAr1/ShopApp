@@ -31,6 +31,16 @@ class MainAPIView(ListCreateAPIView):
         serializer.save()
   
 
+class HoodiesListAPIView(ListAPIView):
+    queryset = Product.objects.filter(category='Hoodies')
+    serializer_class = ProductSerializer
+
+
+class SneakersListAPIView(ListAPIView):
+    queryset = Product.objects.filter(category='Sneakers')
+    serializer_class = ProductSerializer
+
+
 class FavoritesAPIView(ListAPIView, DestroyAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
