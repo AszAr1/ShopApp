@@ -13,8 +13,8 @@ class Product(models.Model):
              'CLOTHES' : ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']}
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=50, blank=False, unique=True)
-    description = models.TextField(max_length=500, blank=True)
-    content = models.TextField(max_length=500, blank=True)
+    description = models.TextField(max_length=1000, blank=True)
+    content = models.TextField(max_length=1000, blank=True)
     category = models.CharField(max_length=30, choices=CHOICES)
     price = models.DecimalField(decimal_places=2, max_digits=7, default=99.99)
     image = models.ImageField(null=True, blank=True)
