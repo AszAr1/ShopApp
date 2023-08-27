@@ -82,15 +82,15 @@ WSGI_APPLICATION = 'ShopPrj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'shopdb',
-        'USER': 'root',
-        'PASSWORD': 'adsw1423@g',
+        'USER': 'deopi',
+        'PASSWORD': '1z2x12@as!q',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command' : 'set sql_mode = STRICT_TRANS_TABLES'
-        },
+        'PORT': '5432',
+        # 'OPTIONS': {
+        #     'init_command' : 'set sql_mode = STRICT_TRANS_TABLES'
+        # },
     }
 }
 
