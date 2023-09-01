@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+# import mongoengine
+
+# mongoengine.connect(db="shopdb")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,17 +83,24 @@ WSGI_APPLICATION = 'ShopPrj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'shopdb',
+#         'USER': 'deopi',
+#         'PASSWORD': '1z2x12@as!q',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#         # 'OPTIONS': {
+#         #     'init_command' : 'set sql_mode = STRICT_TRANS_TABLES'
+#         # },
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'djongo',
         'NAME': 'shopdb',
-        'USER': 'deopi',
-        'PASSWORD': '1z2x12@as!q',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-        # 'OPTIONS': {
-        #     'init_command' : 'set sql_mode = STRICT_TRANS_TABLES'
-        # },
     }
 }
 
