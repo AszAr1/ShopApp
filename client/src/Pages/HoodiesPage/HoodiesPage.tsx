@@ -16,7 +16,7 @@ function SneakersPage() {
 
       <div className="w-full">
 
-        <div className={`grid grid-cols-1 sm:grid-cols-4 gap-8 sm:gap-4 my-20 px-6 sm:px-10`}>
+        <div className={`grid grid-cols-1 laptop:grid-cols-4 gap-8 laptop:gap-4 my-20 px-6 laptop:px-10`}>
 
           {hoodies.map((hoodie) => (
             <Card key={hoodie.id} product={hoodie} />

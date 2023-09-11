@@ -89,7 +89,7 @@ DATABASES = {
         'NAME': 'shopdb',
         'USER': 'root',
         'PASSWORD': 'adsw1423@g',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '3306',
         # 'OPTIONS': {
         #     'init_command' : 'set sql_mode = STRICT_TRANS_TABLES'

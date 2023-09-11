@@ -5,11 +5,11 @@ import {BiSearchAlt} from "react-icons/bi";
 function Search () {
     return(
         <>
-            <Input placeholder={'Search'} className={`bg-black p-1 rounded-xl text-white`}
-                   InputClassName={'hidden sm:block rounded-lg p-2 outline-none text-black w-[300px]'}
-                   ChildrenClassName={'p-2 transition duration-500 hover:bg-white' +
-                       ' hover:text-black rounded-lg'}
-            ><BiSearchAlt className={`text-2xl`}/></Input>
+            <div className="flex justify-center items-center bg-black rounded-lg p-1">
+                <div className="p-2 rounded-lg bg-black text-white hover:bg-white hover:text-black"><BiSearchAlt className="text-2xl"/></div>
+                <input placeholder={'Search'} className={`hidden border-solid border-2 border-black laptop:block rounded-lg p-2 outline-none text-black w-[300px]`}/>
+            </div>
+            
         </>
     )
 }

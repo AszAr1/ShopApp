@@ -9,17 +9,16 @@ const LoginPage = () => {
     const login = useAuthorization(state => state.setUser)
     const push = useNavigate()
 
-    const handleClickLogin = (email:string, password:string) => {
+    const handleClickLogin = (name:string, email:string, password:string) => {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
         .then(({user}) => {
-            login(user.email, user.uid)
+            login(name, user.email, user.uid)
             push('/')
         }).catch(console.error)
-    } 
+    }
 
   return (
-    
     <Form loginPage={true} title='Login' handleClick={handleClickLogin} underText={`Dont't have an account?`} underText2='Register' link={'register'}/>
   )
 }

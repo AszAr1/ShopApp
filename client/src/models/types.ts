@@ -32,14 +32,21 @@ export interface ButtonProps {
 }
 
 export interface ProductsProps {
-  id: number,
-  image: string,
+  id: string,
+  // image: string,
+  // title: string,
+  // category: string,
+  // price: number,
+  // discountPrise: number,
+  // description: string,
+  // about: string,
+  // sizes: []
   title: string,
-  categorie: string,
-  price: number,
-  discountPrise: number,
   description: string,
-  about: string,
+  content: string,
+  category: string,
+  price: number,
+  image: string,
   sizes: []
 }
 
@@ -71,7 +78,7 @@ export interface useSneakersProps {
   loading: boolean,
   getSneakers: () => void,
   getLimiteSneakers: (limit: number, offset: number) => void,
-  getOneSneaker: (producId: string | undefined) => void
+  getOneSneaker: (producTitle: string | undefined) => void
 }
 
 export interface useHoodiesProps {
@@ -85,7 +92,7 @@ export interface useHoodiesProps {
 
 export interface formProps {
   title: string,
-  handleClick: (email: string, password: string) => void,
+  handleClick: (name: string, email: string, password: string) => void,
   underText: string,
   underText2: string,
   link: string,
@@ -94,11 +101,12 @@ export interface formProps {
 
 export interface useAuthorizationProps {
   user: {
+    name: string | null,
     email: string | null,
     id: string | null | number,
   },
   login: boolean,
-  setUser: (email: string | null, id: string | number) => void,
+  setUser: (name: string | null, email: string | null, id: string | number) => void,
   removeUser: () => void
 }
 
@@ -108,4 +116,9 @@ export interface useFavoriteProps {
   getFavorite: () => void,
   addFavorite: (productId: number, productType:string | undefined) => void,
   deleteFavorite: (productId: number) => void
+}
+
+export interface useSearchProps {
+  products:  ProductsProps[],
+  searchProduct: (proudtcName: string) => void
 }

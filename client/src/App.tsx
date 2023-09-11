@@ -27,7 +27,7 @@ function App() {
         <Route path="/order" element={<OrderPage />} />
 
                 //Sneakers Pages
-        <Route path="/sneakers/:productId" element={<SneakerProductPage />} />
+        <Route path="/Sneakers/:productTitle" element={<SneakerProductPage />} />
         <Route path="/sneakers/" element={<SneakersPage />} />
 
                 //Hoodie Pages

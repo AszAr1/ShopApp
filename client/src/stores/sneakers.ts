@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import axios from "axios";
-import { BrandsProps, ProductsProps, useSneakersProps } from "../models/types";
+import { useSneakersProps } from "../models/types";
 
 export const useSneakers = create<useSneakersProps>(set => ({
   sneakers: [],
@@ -8,7 +8,8 @@ export const useSneakers = create<useSneakersProps>(set => ({
   loading: true,
   async getSneakers() {
     try {
-      const response = await axios.get('http://localhost:3001/sneakers')
+      const response = await axios.get('http://localhost:8000/products/sneakers/')
+      console.log(response.data)
       set({ sneakers: await response.data })
     } catch (error) {
       console.error('Ошибка при получении данных с сервера:', error)
@@ -31,9 +32,10 @@ export const useSneakers = create<useSneakersProps>(set => ({
     }
   },
 
-  async getOneSneaker(productId) {
+  async getOneSneaker(productTitle) {
     try {
-      const response = await axios.get(`http://localhost:3001/sneakers/${productId}`)
+      const response = await axios.get(`http://localhost:8000/products/${productTitle}`)
+      console.log(response.data)
       set({ sneaker: response.data })
     } catch (error) {
       console.error('Ошибка при получении данных с сервера:', error)

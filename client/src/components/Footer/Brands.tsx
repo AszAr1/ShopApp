@@ -5,7 +5,7 @@ import axios from "axios";
 
 const getBrands = async () => {
   try {
-      const response = await axios.get<BrandsProps[]>(`http://localhost:3001/brands`);
+      const response = await axios.get<BrandsProps[]>(`http://localhost:8000/brands`);
       return response.data
   } catch (error) {
       console.error('Ошибка при получении данных с сервера:', error);

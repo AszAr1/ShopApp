@@ -34,7 +34,7 @@ function Card ({product}) {
                             {product.title}
                         </h1>
                         <p className="text-lg">
-                            Categorie: <span className="font-bold">{product.categorie}</span>
+                            Category: <span className="font-bold">{product.category}</span>
                         </p>
                         <p>
                             Price: <span className="font-bold">{product.price}$</span>
@@ -42,7 +42,7 @@ function Card ({product}) {
                     </div>
 
                     <div className={`flex justify-between items-center flex-row w-full`}>
-                        <Link to={`/${product.categorie}/${product.id}`}>
+                        <Link to={`/${product.category}/${product.title.split('%20').join(' ')}`}>
                             <Button className="bg-black shadow-md border-2 border-black text-white px-3 py-2 font-bold mt-5
                             transition duration-500 hover:bg-white hover:text-black">
                                 See more
@@ -51,7 +51,7 @@ function Card ({product}) {
                          <button className="bg-black shadow-md border-2 border-black text-white px-3 py-2 font-bold mt-5
                              transition duration-500 hover:bg-white hover:text-black
                          "
-                         onClick={() => toggleFavorite(product.id, product.categorie)}
+                         onClick={() => toggleFavorite(product.id, product.category)}
                          >
                             <AiOutlineStar className="text-2xl font-bold"/>
                          </button>

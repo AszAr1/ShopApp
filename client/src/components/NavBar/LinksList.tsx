@@ -48,7 +48,7 @@ function LinksList({ className, classNameLi }: LinksItemsProps) {
         {links.map((link) => (
           <ul key={link.id}>
             <li className={`${classNameLi} my-2 flex justify-between items-center p-1 rounded-xl
-                                transition duration-500 hover:bg-white hover:text-black`}>
+                transition duration-500 hover:bg-white hover:text-black`}>
               <div className={`mr-2`}>{link.icon}</div>
               <h1><Link to={`/${link.link}`}>{link.title}</Link></h1>
             </li>

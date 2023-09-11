@@ -21,58 +21,59 @@ function NavBar() {
 
   return isLoggin ? (
     <>
-      <div className={`flex justify-between items-center sm:px-24 px-6 py-7 w-full border-b-2 border-black`}>
-        <a href={`/`} className={`hidden sm:block font-bold text-2xl font-mono`}>Sneakers</a>
+      <div className={`flex justify-between items-center laptop:px-24 px-6 py-7 w-full border-b-2 border-black`}>
+        <a href={`/`} className={`hidden laptop:block font-bold text-2xl font-mono`}>Sneakers</a>
 
         <Search />
 
-        <a href={`/`} className={`block sm:hidden font-bold text-2xl font-mono`}>Sneakers</a>
-        {/* <LinksList className={`hidden sm:flex justify-center items-center`}
+        <a href={`/`} className={`block laptop:hidden font-bold text-2xl font-mono`}>Sneakers</a>
+        {/* <LinksList className={`hidden laptop:flex justify-center items-center`}
           classNameLi={`mx-2 transition duration-500 hover:scale-110`} /> */}
-        <div className="hidden sm:flex justify-center items-center">
+        <div className="hidden laptop:flex justify-center items-center">
           <ul className="flex flex-row">
             <li className={`mx-2 transition duration-500 hover:scale-110 my-2 flex justify-between items-center p-1 rounded-xl
-                              transition duration-500 hover:bg-white hover:text-black`}>
+                               hover:bg-white hover:text-black`}>
               <div className={`mr-2`}><HiOutlineInboxStack /></div>
               <h1><Link to={`/order`}>Orders</Link></h1>
             </li>
             <li className={`mx-2 transition duration-500 hover:scale-110 my-2 flex justify-between items-center p-1 rounded-xl
-                              transition duration-500 hover:bg-white hover:text-black`}>
+                               hover:bg-white hover:text-black`}>
               <div className={`mr-2`}><BsCartCheck /></div>
               <h1><Link to={`/cart`}>Cart</Link></h1>
             </li>
             <li className={`mx-2 transition duration-500 hover:scale-110 my-2 flex justify-between items-center p-1 rounded-xl
-                              transition duration-500 hover:bg-white hover:text-black`}>
+                              hover:bg-white hover:text-black`}>
               <div className={`mr-2`}><MdOutlineFavoriteBorder /></div>
               <h1><Link to={`/favorites`}>Favorites</Link></h1>
             </li>
             <li className={`mx-2 transition duration-500 hover:scale-110 my-2 flex justify-between items-center p-1 rounded-xl
-                              transition duration-500 hover:bg-white hover:text-black`}>
+                              hover:bg-white hover:text-black`}
+            >
               <div className={`mr-2`}><CgProfile /></div>
               <h1><Link to={`/profile`}>Profile</Link></h1>
             </li>
           </ul>
         </div>
-        <Profile className={`block sm:hidden`} open={open} isOpen={handleOpen} />
+        <Profile className={`block laptop:hidden`} open={open} isOpen={handleOpen} />
         <Menu open={open}><LinksList /></Menu>
       </div>
     </>
   ) : (
-    <div className={`flex justify-between items-center sm:px-24 px-6 py-7 w-full border-b-2 border-black`}>
-      <a href={`/`} className={`hidden sm:block font-bold text-2xl font-mono`}>Sneakers</a>
+    <div className={`flex justify-between items-center laptop:px-24 px-6 py-7 w-full border-b-2 border-black`}>
+      <a href={`/`} className={`hidden laptop:block font-bold text-2xl font-mono`}>Sneakers</a>
 
       <Search />
 
-      <a href={`/`} className={`block sm:hidden font-bold text-2xl font-mono`}>Sneakers</a>
+      <a href={`/`} className={`block laptop:hidden font-bold text-2xl font-mono`}>Sneakers</a>
 
-      <div className={`sm:flex hidden justify-center items-center flex-row`}>
+      <div className={`laptop:flex hidden justify-center items-center flex-row`}>
         <button className={`p-2 w-[140px] bg-black rounded-md border-2 border-solid border-black
           text-white font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}><Link to={'/login'}>Log In</Link></button>
         <button className={`p-2 w-[140px] ml-5 bg-black rounded-md border-2 border-solid border-black
           text-white font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}><Link to={'/register'}>Registration</Link></button>
       </div>
 
-      <div className={`block sm:hidden flex justify-between items-center rounded-xl border-black border-2 shadow-md p-3
+      <div className={`laptop:hidden flex justify-between items-center rounded-xl border-black border-2 shadow-md p-3
       transition duration-500 ${open ? '-translate-y-2' : 'translate-y-0'}`}
         onClick={handleOpen}
       >
@@ -87,7 +88,7 @@ function NavBar() {
 
       </div>
 
-      <div className={`${open ? 'block' : 'hidden'} flex justify-center items-center flex-col sm:hidden bg-black p-6 absolute top-20 left-[201px] text-white rounded-xl`}>
+      <div className={`${open ? 'block' : 'hidden'} flex justify-center items-center flex-col laptop:hidden bg-black p-6 absolute top-20 left-[201px] text-white rounded-xl`}>
         <button className={`p-2 w-[140px] bg-white rounded-md border-2 border-solid border-black
           text-black font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}><Link to={'/login'}>Log In</Link></button>
         <button className={`p-2 w-[140px] mt-5 bg-white rounded-md border-2 border-solid border-black

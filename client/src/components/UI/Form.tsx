@@ -6,7 +6,7 @@ import LoginPage from '../../Pages/AuthorizationPage/LoginPage'
 
 const Form = ({title, handleClick, underText, underText2, link, loginPage}: formProps) => {
 
-    // const [name, setName] = useState('')
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -20,14 +20,14 @@ const Form = ({title, handleClick, underText, underText2, link, loginPage}: form
                         bg-white rounded-md`}>
             <h1 className={`text-2xl font-mono font-bold mb-4`}>{title}</h1>
             <form className={`flex justify-center items-start flex-col`}>
-                {/* <h1 className={`${loginPage ? 'hidden' : 'flex'} font-mono mb-2 text-sm`}>Enter your name</h1>
+                <h1 className={`${loginPage ? 'hidden' : 'flex'} font-mono mb-2 text-sm`}>Enter your name</h1>
                 <input
                     type='name'
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder='Alex'
                     className={`${loginPage ? 'hidden' : 'flex'} p-2 w-[250px] bg-gray-300 rounded-md outline-none`}
-                /> */}
+                />
                 <h1 className="font-mono my-2 text-sm">Enter your email</h1>
                 <input
                     type='email'
@@ -46,7 +46,7 @@ const Form = ({title, handleClick, underText, underText2, link, loginPage}: form
                 />
             </form>
             <h1 className='text-md my-4 text-gray-500'>{underText} <Link to={`/${link}`} className='text-md text-black hover:text-blue-400'>{underText2}</Link></h1>
-            <button onClick={() => handleClick(email, password)} children={`${loginPage ? 'Log in' : 'Register'}`} className={`bg-black p-2 w-[250px] rounded-md text-white font-mono font-bold
+            <button onClick={() => handleClick(name, email, password)} children={`${loginPage ? 'Log in' : 'Register'}`} className={`bg-black p-2 w-[250px] rounded-md text-white font-mono font-bold
             duration-300 transition hover:bg-white hover:text-black border-2 border-solid border-black`}/>
         </div>
     </div>
