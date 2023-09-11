@@ -9,7 +9,7 @@ export const useHoodies = create<useHoodiesProps>(set => ({
     
     async getLimitedHoodies (limit, offset) {
         try {
-            const response = await axios.get('http://localhost:3001/hoodie', {
+            const response = await axios.get('http://localhost:8000/products/hoodies/', {
               params: { _limit: limit, _offset: offset },
             })
             set({ hoodies: await response.data })
@@ -25,7 +25,7 @@ export const useHoodies = create<useHoodiesProps>(set => ({
 
     async getHoodies() {
         try {
-            const response = await axios.get('http://localhost:3001/hoodie')
+            const response = await axios.get('http://localhost:3001/')
             set({ hoodies: await response.data })
           } catch (e) {
             console.error("Ошибка получения данных с сервера", e)
