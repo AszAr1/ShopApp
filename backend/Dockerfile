@@ -12,4 +12,4 @@ ENV MYSQL_DATABASE=shopdb
 
 COPY dump.sql /docker-entrypoint-initdb.d/
 
-EXPOSE 3306
+EXPOSE 3360
