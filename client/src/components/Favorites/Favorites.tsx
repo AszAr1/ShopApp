@@ -30,13 +30,13 @@ export const Favorites = () => {
                     ? 
                         <div className="flex justify-center items-center h-full w-full">Loading</div>
                     : 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-10">
+                        <div className="grid grid-cols-1 laptop:grid-cols-3 gap-4 p-10">
                             {favorites.map((item) => (
                             <div key={item.id}><Card product={item}/></div>
                         ))}
-          </div> 
-      }
+                        </div> 
+                 }
             </div>
-        )
+      )
     }
 }

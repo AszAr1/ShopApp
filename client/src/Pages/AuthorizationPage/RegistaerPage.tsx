@@ -10,11 +10,11 @@ const RegistaerPage = () => {
 
   const push = useNavigate()
 
-  const handleClickRegister = (email:string, password:string) => {
+  const handleClickRegister = (name:string, email:string, password:string) => {
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, email, password)
         .then(({user}) => {
-          register(user.email, user.uid)
+          register(name, user.email, user.uid)
           push('/')
         })
         .catch(console.error)

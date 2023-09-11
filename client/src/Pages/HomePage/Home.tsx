@@ -21,9 +21,9 @@ function Home() {
   return (
     <>
       <Intro />
-      <div className="mt-20 flex px-6 sm:px-24 justify-center items-start flex-col">
+      <div className="mt-20 flex px-6 laptop:px-24 justify-center items-start flex-col">
         <Link to={`/sneakers`} className={`text-5xl font-bold font-mono mb-10`}>Our sneakers</Link>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 laptop:grid-cols-3 gap-4">
           {sneakers.map((sneak) => (
             <Card key={sneak.id} product={sneak} />
           ))}
@@ -36,9 +36,9 @@ function Home() {
           </Button>
         </Link>
       </div>
-      <div className="mt-20 flex px-6 sm:px-24 justify-center items-start flex-col">
+      <div className="mt-20 flex px-6 laptop:px-24 justify-center items-start flex-col">
         <Link to={'/hoodie'} className={'text-5xl font-bold font-mono mb-10'}>Our hoodie</Link>
-        <div className={'grid grid-cols-1 sm:grid-cols-3 gap-4'}>
+        <div className={'grid grid-cols-1 laptop:grid-cols-3 gap-4'}>
           {hoodies.map((hoodie) => (
             <Card key={hoodie.id} product={hoodie} />
           ))}

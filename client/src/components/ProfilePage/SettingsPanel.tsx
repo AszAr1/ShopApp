@@ -18,7 +18,7 @@ const SettingsPanel:FC<SettingsPanel> = (props) => {
 
   return (
     <>
-        <div className="flex flex-col justify-center items-center w-[500px] p-5 border-r-2 border-solid border-black h-screen">
+        <div className="laptop:flex hidden flex-col justify-center items-center w-[500px] p-5 border-r-2 border-solid border-black h-screen">
 
             <div className='w-[200px] h-[200px] relative overflow-hidden border-2 border-solid border-black rounded-full'>
                 <img className='absolute' src='https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80'/>

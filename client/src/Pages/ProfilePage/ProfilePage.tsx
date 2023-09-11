@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SettingsPanel from "../../components/ProfilePage/SettingsPanel";
-import Profile from "../../components/ProfilePage/ProfilePanel";
+import Profile from "../../components/ProfilePage/ProfilePanel/ProfilePanel";
 import SecurityPanel from "../../components/ProfilePage/SecurityPanel";
 import OrderPanel from "../../components/ProfilePage/OrderPanel";
 import CartPanel from "../../components/ProfilePage/CartPanel";

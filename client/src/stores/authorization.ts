@@ -4,13 +4,16 @@ import { devtools, persist } from "zustand/middleware"
 
 export const useAuthorization = create<useAuthorizationProps>()(devtools(persist((set => ({
   user: {
+    name: null,
     email: null,
     id: null
   },
   login: false,
-  setUser(email, id) {
+
+  setUser(name, email, id) {
     set({
       user: {
+        name: name,
         email: email,
         id: id
       },
@@ -21,6 +24,7 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
   removeUser() {
     set({
       user: {
+        name: null,
         email: null,
         id: null
       },
