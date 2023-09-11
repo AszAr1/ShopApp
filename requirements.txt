@@ -1,0 +1,7 @@
+Django
+djangorestframework
+Pillow
+mysqlclient
+django-cors-headers
+django-random-id-model
+sqlparse
