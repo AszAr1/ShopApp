@@ -2,12 +2,14 @@ from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework.authentication import *
-from rest_framework.views import APIView
 from rest_framework.viewsets import *
-from django.urls import reverse, resolve
 
 from .models import Product, Favorite, CartItem, Order, OrderItem
-from .serializers import ProductSerializer, CartItemSerializer, FavoriteSerializer, OrderItemSerializer, OrderSerializer
+from .serializers import (ProductSerializer, 
+                          CartItemSerializer, 
+                          FavoriteSerializer, 
+                          OrderItemSerializer, 
+                          OrderSerializer)
 
 
 class MainAPIView(ListCreateAPIView):
