@@ -1,17 +1,16 @@
-from uuid import uuid4
 from django.db import models
+from django_random_id_model import RandomIDModel
 
 from users.models import CustomUser
 
 
-class Product(models.Model):
+class Product(RandomIDModel, models.Model):
     CHOICES = (
         ('Sneakers', 'Sneakers'),
         ('Hoodies', 'Hoodies'),
     )
     SIZES = {'SHOES' : [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
              'CLOTHES' : ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']}
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=50, blank=False, unique=True)
     description = models.TextField(max_length=1000, blank=True)
     content = models.TextField(max_length=1000, blank=True)
@@ -29,8 +28,7 @@ class Product(models.Model):
             return []
         
 
-class CartItem(models.Model):
-    id = models.UUIDField(primary_key = True, default = uuid4, editable = False)
+class CartItem(RandomIDModel, models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     quantity = models.PositiveIntegerField(blank=False, null=False)
@@ -40,8 +38,7 @@ class CartItem(models.Model):
         return self.product.price * self.quantity
 
 
-
-class Order(models.Model):
+class Order(RandomIDModel, models.Model):
     PENDING = 0
     AWAITING_PAYMENT = 1
     AWAITING_FULLFILLMENT = 2
@@ -67,13 +64,10 @@ class Order(models.Model):
         DISPUTED: 'Disputed',
     }
 
-
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=30, default=STATUS_CHOICES[PENDING], null=True, editable=False)
     
-
     def get_price(self) -> int:
         queryset = OrderItem.objects.filter(order=self.id)
         if len(queryset) > 0:
@@ -82,8 +76,7 @@ class Order(models.Model):
             return 0
         
 
-class OrderItem(models.Model):
-    id = models.UUIDField(primary_key = True, default = uuid4, editable = False)
+class OrderItem(RandomIDModel, models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     quantity = models.PositiveIntegerField()
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
@@ -93,9 +86,6 @@ class OrderItem(models.Model):
         return self.product.price * self.quantity
 
 
-class Favorite(models.Model):
-    id = models.UUIDField(primary_key = True, default = uuid4, editable = False)
+class Favorite(RandomIDModel, models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-
-    

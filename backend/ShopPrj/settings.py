@@ -89,7 +89,7 @@ DATABASES = {
         'NAME': 'shopdb',
         'USER': 'root',
         'PASSWORD': 'adsw1423@g',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '3306',
         # 'OPTIONS': {
         #     'init_command' : 'set sql_mode = STRICT_TRANS_TABLES'
@@ -140,9 +140,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny']
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny']
+# }
 
 CORS_ORIGIN_ALLOW_ALL = True
 
