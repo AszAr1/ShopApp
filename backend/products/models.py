@@ -16,7 +16,7 @@ class Product(RandomIDModel, models.Model):
     content = models.TextField(max_length=1000, blank=True)
     category = models.CharField(max_length=30, choices=CHOICES)
     price = models.DecimalField(decimal_places=2, max_digits=7, default=99.99)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(upload_to='source', null=True, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def get_sizes(self):
@@ -24,8 +24,11 @@ class Product(RandomIDModel, models.Model):
             return self.SIZES['CLOTHES']
         elif self.category in self.CHOICES[0]:
             return self.SIZES['SHOES']            
-        else:
+        else:   
             return []
+        
+    def get_image(self):
+        return 'http://localhost:8000/' + self.image.url
         
 
 class CartItem(RandomIDModel, models.Model):

@@ -6,27 +6,38 @@ from .models import Product, OrderItem, Order, CartItem, Favorite
 
 class ProductSerializer(ModelSerializer):   
     sizes = SerializerMethodField(read_only=True)
-    # see_more = SerializerMethodField(read_only=True)
-    see_more = HyperlinkedIdentityField(view_name='product-detail', lookup_field='title')
-
+    id = SerializerMethodField(read_only=True)
+    # see_image = HyperlinkedIdentityField(view_name='product-image', lookup_field='image')
+    see_more = HyperlinkedIdentityField(view_name='product-detail', lookup_field='pk')
+    # image = SerializerMethodField(read_only=True)
+    # see_image = SerializerMethodField(read_only=True)
+    
 
     class Meta:
         model = Product
-        fields = ['pk', 'title', 'description', 'content', 'category', 'price', 'image', 'pub_date', 'see_more' , 'sizes']
-
-    # def get_see_more(self, obj):
-    #     request = self.context.get('request')
-    #     if request is None:
-    #         return None
-    #     return reverse('product-detail', kwargs={'title': obj.title}, request=request)
+        fields = ["id", 'title', 'description', 'content', 'category', 'image', 'price', 'pub_date', 'see_more' , 'sizes']
 
     def get_sizes(self, obj):
-        if not hasattr(obj, 'id'):
-            return None
-        if not isinstance(obj, Product):
+        if not hasattr(obj, 'id') or not isinstance(obj, Product):
             return None
         return obj.get_sizes()
     
+    def get_image(self, obj):
+        if not hasattr(obj, 'id') or not isinstance(obj, Product):
+            return None
+        return obj.get_image()
+    
+    def get_id(self, obj):
+        if not hasattr(obj, 'id') or not isinstance(obj, Product):
+            return None
+        return obj.id
+
+    # def get_see_image(self, obj):
+    #     request = self.context.get('request')
+    #     if request is None:
+    #         return None
+    #     return reverse('product-image', kwargs={'image': str(obj.image.url)}, request=request)
+
 
 class OrderItemSerializer(ModelSerializer):
     class Meta:

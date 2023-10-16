@@ -8,6 +8,6 @@ from .views import (CustomUserRegistrationAPIView,
 urlpatterns = [
     path('signup/', CustomUserRegistrationAPIView.as_view(), name='signup'),
     path('login/', obtain_auth_token, name='login'),
-    path('users/', CustomUserAPIView.as_view(), name='users'),
-    path('users/<str:username>/', CustomUserProfileAPIView.as_view(), name='profile'),
+    path('', CustomUserAPIView.as_view(), name='users'),
+    path('<str:username>/', CustomUserProfileAPIView.as_view(), name='profile'),
 ]

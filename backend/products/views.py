@@ -62,7 +62,7 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
 class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    lookup_field = 'title'
+    lookup_field = 'pk'
 
 
     def get_serializer(self, *args, **kwargs):
@@ -76,6 +76,13 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
 
         kwargs.setdefault('context', self.get_serializer_context()) 
         return serializer_class(*args, **kwargs)
+    
+    def  retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        data = serializer.data.copy()
+        data['smth'] = serializer.data['image']
+        return Response(data)        
 
 
     def post(self, request, *args, **kwargs):
@@ -95,13 +102,25 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
     
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
-        obj = Favorite.objects.filter(product=instance.id, user=self.request.user.id)
-        self.perform_destroy(obj)
-        data = request.data.copy()
+        data = dict()
         data['smth'] = instance.id
+        self.perform_destroy(instance)
         return Response(data=data, status=status.HTTP_204_NO_CONTENT)
 
-            
+
+class ImageAPIView(RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'image'
+
+    def retrieve(self, request, *args, **kwargs):
+        image = f"source/{self.kwargs['image']}" 
+        self.get_object()
+        instance = Product.objects.filter(image=image)[0]
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data['image'])
+
+
 class AddFavotiteAPIView(CreateAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
@@ -220,3 +239,4 @@ class OrderAPIView(ListAPIView):
 class OrderItemAPIView(ListAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+
