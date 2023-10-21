@@ -42,7 +42,7 @@ function Card ({product}) {
                     </div>
 
                     <div className={`flex justify-between items-center flex-row w-full`}>
-                        <Link to={`/${product.category}/${product.title.split('%20').join(' ')}`}>
+                        <Link to={`/products/${product.id}`}>
                             <Button className="bg-black shadow-md border-2 border-black text-white px-3 py-2 font-bold mt-5
                             transition duration-500 hover:bg-white hover:text-black">
                                 See more

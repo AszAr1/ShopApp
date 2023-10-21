@@ -32,10 +32,9 @@ export const useSneakers = create<useSneakersProps>(set => ({
     }
   },
 
-  async getOneSneaker(productTitle) {
+  async getOneSneaker(id) {
     try {
-      const response = await axios.get(`http://localhost:8000/products/${productTitle}`)
-      console.log(response.data)
+      const response = await axios.get(`http://localhost:8000/products/${id}`)
       set({ sneaker: response.data })
     } catch (error) {
       console.error('Ошибка при получении данных с сервера:', error)

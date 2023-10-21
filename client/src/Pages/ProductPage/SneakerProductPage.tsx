@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import SneakerSize from "./ProductsSize";
 import Button from "../../components/UI/Button";
@@ -6,15 +6,12 @@ import Description from "./Description";
 import { useSneakers } from "../../stores/sneakers";
 
 function ProductPage() {
-  const { productTitle } = useParams()
-  productTitle?.split('%20').join(' ')
-  console.log(productTitle)
-
+  const { id } = useParams()
   const getProduct = useSneakers(state => state.getOneSneaker)
   const sneaker = useSneakers(state => state.sneaker)
 
   useEffect(() => {
-    getProduct(productTitle)
+    getProduct(id)
   }, []);
 
   if (!sneaker) {

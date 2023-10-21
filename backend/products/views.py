@@ -1,8 +1,10 @@
+from django.http import HttpResponse
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework.authentication import *
 from rest_framework.viewsets import *
+
 
 from .models import Product, Favorite, CartItem, Order, OrderItem
 from .serializers import (ProductSerializer, 
@@ -10,6 +12,7 @@ from .serializers import (ProductSerializer,
                           FavoriteSerializer, 
                           OrderItemSerializer, 
                           OrderSerializer)
+from ShopPrj.settings import MEDIA_ROOT
 
 
 class MainAPIView(ListCreateAPIView):
@@ -106,19 +109,6 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
         data['smth'] = instance.id
         self.perform_destroy(instance)
         return Response(data=data, status=status.HTTP_204_NO_CONTENT)
-
-
-class ImageAPIView(RetrieveAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    lookup_field = 'image'
-
-    def retrieve(self, request, *args, **kwargs):
-        image = f"source/{self.kwargs['image']}" 
-        self.get_object()
-        instance = Product.objects.filter(image=image)[0]
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data['image'])
 
 
 class AddFavotiteAPIView(CreateAPIView):

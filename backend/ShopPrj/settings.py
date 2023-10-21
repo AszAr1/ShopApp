@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,8 +26,9 @@ SECRET_KEY = 'django-insecure-0-3q!tt(r(v=(=645un=^ksplmvt_*&_@ri0339oip!^&-k6j(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
+# APPEND_SLASH = False
 
 # Application definition
 
@@ -87,7 +89,7 @@ DATABASES = {
         'NAME': 'shopdb',
         'USER': 'root',
         'PASSWORD': 'adsw1423@g',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '3306',
         # 'OPTIONS': {
         #     'init_command' : 'set sql_mode = STRICT_TRANS_TABLES'
@@ -131,7 +133,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# STATICFILES_DIRS = [os.path.join(REAL_BASE_DIR, 'client', 'build', 'static')]
+MEDIA_URL = '/source/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'source/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -145,5 +148,3 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-    
