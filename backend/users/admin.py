@@ -1,11 +1,11 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin 
 
 from .models import CustomUser 
 
 
-class UserAdmin(admin.ModelAdmin):
-    filter_horizontal = ('groups', 'user_permissions',)
+class CumstomUserAdmin(UserAdmin):
+    pass
 
-filter_horizontal = ('groups', 'user_permissions')
 
-admin.site.register(CustomUser)
+admin.site.register(CustomUser, CumstomUserAdmin)

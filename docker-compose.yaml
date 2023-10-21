@@ -3,7 +3,7 @@ services:
   db:
     image: mydb
     ports:
-      - "3306:3306"
+      - "3360:33060"
     environment:
       - MYSQL_ROOT_PASSWORD=adsw1423@g
       - MYSQL_PORT=3306
@@ -17,3 +17,6 @@ services:
       - MYSQL_HOST=db
     depends_on:
       - db
+    # volumes:
+    #   - ./backend:/shopApp/
+    
