@@ -1,10 +1,8 @@
-from django.http import HttpResponse
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework.authentication import *
 from rest_framework.viewsets import *
-
 
 from .models import Product, Favorite, CartItem, Order, OrderItem
 from .serializers import (ProductSerializer, 
@@ -12,14 +10,11 @@ from .serializers import (ProductSerializer,
                           FavoriteSerializer, 
                           OrderItemSerializer, 
                           OrderSerializer)
-from ShopPrj.settings import MEDIA_ROOT
 
 
 class MainAPIView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # authentication_classes = [SessionAuthentication]
-    # permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -67,7 +62,6 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
     serializer_class = ProductSerializer
     lookup_field = 'pk'
 
-
     def get_serializer(self, *args, **kwargs):
         if self.request.method == "POST":
             if 'quantity' in self.request.data.keys():
@@ -80,28 +74,20 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
         kwargs.setdefault('context', self.get_serializer_context()) 
         return serializer_class(*args, **kwargs)
     
-    def  retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        data = serializer.data.copy()
-        data['smth'] = serializer.data['image']
-        return Response(data)        
-
+        return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        data = request.data.copy()
-        if not 'user' in data.keys():
-            data['user'] = request.user.id
-        else:
-            if data['user'] == '':
-                data['user'] = request.user.id
-
+        data = self.request.data.copy()
+        data['user'] = request.user.id
+        print(data['user'])
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        data = serializer.data.copy()
-        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -111,122 +97,39 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
         return Response(data=data, status=status.HTTP_204_NO_CONTENT)
 
 
-class AddFavotiteAPIView(CreateAPIView):
-    queryset = Favorite.objects.all()
-    serializer_class = FavoriteSerializer
-
-    def post(self, request, *args, **kwargs):
-        data = request.data.copy()
-        if not 'user' in data.keys():
-            data['user'] = request.user.id
-        else:
-            if data['user'] == '':
-                data['user'] = request.user.id
-
-        serializer = self.get_serializer(data=data)
-        
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        data['smth'] = self.request.user.id
-        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
-
-
-class CartAPIView(ListCreateAPIView):
+class CartAPIView(ListAPIView):
     queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
-    # user_id = serializer_class.data.getter('pk')
-    # queryset = BasketItem.objects.filter(user=user_id)
-    # queryset = BasketItem.objects.all()
-
-    def get_serializer(self, *args, **kwargs):
-        if self.request.method == "POST":
-            if 'quantity' in self.request.data.keys():
-                serializer_class = OrderItemSerializer
-            else: 
-                serializer_class = OrderSerializer
-        else: 
-            serializer_class = CartItemSerializer
-
-        kwargs.setdefault('context', self.get_serializer_context()) 
-        return serializer_class(*args, **kwargs)
-    
-
-
-    def post(self, request, *args, **kwargs):
-        return_data = request.data
-        if not 'customer' in return_data.keys():
-            return_data['customer'] = request.user.id  
-        else:
-            if return_data['customer'] == None:
-                return_data['customer'] = request.user.id
-
-        serializer = self.get_serializer(data=return_data)
-        
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        
-        order_id = serializer.data.get('id')
-        return_data.pop("customer")
-
-        for cart_item in CartItem.objects.filter(user=self.request.user.id):
-            return_data['order'] = order_id
-            product = ''.join(str(cart_item.product).split('(')[1:])[:-1]
-            return_data['product'] = product
-            return_data['quantity'] = cart_item.quantity
-
-            serializer = self.get_serializer(data=return_data)
-            
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-
-        return_data.clear()
-        return_data['customer'] = self.request.user.id 
-        return_data['order'] = order_id  
-
-        return Response(return_data, status=status.HTTP_201_CREATED, headers=headers)
-    
+    serializer_class = CartItemSerializer 
 
     def list(self, request, *args, **kwargs):
-        list_queryset = CartItem.objects.filter(user=request.user.id)
-        # list_queryset = CartItem.objects.all()
+        queryset = CartItem.objects.filter(user=request.user.id)
 
-        page = self.paginate_queryset(list_queryset)
+        page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(list_queryset, many=True)
-        data = serializer.data.copy()
-        # data.append()
-        return Response(data)
-
-
-class AddBasketItemAPIView(CreateAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
-
-    def post(self, request, *args, **kwargs):
-        data = request.data.copy()
-        if data['user'] == '':
-            data['user'] = request.user.id
-
-
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        
-        data['smth'] = self.request.user.id
-        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class OrderAPIView(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-class OrderItemAPIView(ListAPIView):
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
 
+class OrderItemAPIView(RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    lookup_field = 'pk'
+
+    def retrieve(self, request, *args, **kwargs):
+        queryset = OrderItem.objects.filter(order=kwargs['pk'])
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = OrderItemSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = OrderItemSerializer(queryset, many=True)
+        return Response(serializer.data)

@@ -3,7 +3,17 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField, H
 from .models import Product, OrderItem, Order, CartItem, Favorite
 
 
-class ProductSerializer(ModelSerializer):   
+class GetID():
+    class Meta:
+        model = None
+
+    def get_id(self, obj):
+        if not hasattr(obj, 'id') or not isinstance(obj, self.Meta.model):
+            return None
+        return obj.id
+
+
+class ProductSerializer(ModelSerializer, GetID):   
     sizes = SerializerMethodField(read_only=True)
     id = SerializerMethodField(read_only=True)
     see_more = HyperlinkedIdentityField(view_name='product-detail', lookup_field='pk')
@@ -16,25 +26,24 @@ class ProductSerializer(ModelSerializer):
         if not hasattr(obj, 'id') or not isinstance(obj, Product):
             return None
         return obj.get_sizes()
-    
-    def get_id(self, obj):
-        if not hasattr(obj, 'id') or not isinstance(obj, Product):
-            return None
-        return obj.id
 
 
-class OrderItemSerializer(ModelSerializer):
+class OrderItemSerializer(ModelSerializer, GetID):
+    id = SerializerMethodField(read_only=True)
+
     class Meta:
         model = OrderItem
-        fields = ['order', 'product', 'quantity', 'item_total']
+        fields = ["id", 'order', 'product', 'quantity', 'item_total']
 
 
-class OrderSerializer(ModelSerializer):
+class OrderSerializer(ModelSerializer, GetID):
     price = SerializerMethodField(read_only=True)
+    id = SerializerMethodField(read_only=True)
+    see_more = HyperlinkedIdentityField(view_name='order-items', lookup_field='pk')
     
     class Meta:
         model = Order
-        fields = ['id', 'customer', 'order_date', 'status', 'price'] 
+        fields = ['id', 'customer', 'order_date', 'status', 'price', "see_more"] 
                    
     def get_price(self, obj):
         if not hasattr(obj, 'id'):
@@ -42,15 +51,19 @@ class OrderSerializer(ModelSerializer):
         if not isinstance(obj, Order):
             return None
         return obj.get_price()
+    
 
+class FavoriteSerializer(ModelSerializer, GetID):
+    id = SerializerMethodField(read_only=True)    
 
-class FavoriteSerializer(ModelSerializer):
     class Meta:
         model = Favorite
         fields = ['id', 'user', 'product']
 
 
-class CartItemSerializer(ModelSerializer):
+class CartItemSerializer(ModelSerializer, GetID):
+    id = SerializerMethodField(read_only=True) 
+
     class Meta:
         model = CartItem
         fields = ['id', 'user', 'product', 'quantity', 'item_total']
