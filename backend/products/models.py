@@ -31,12 +31,8 @@ class Product(RandomIDModel, models.Model):
         else:   
             return []
         
-    def get_image(self):
-        return 'http://localhost:8000/' + self.image.url
-    
     def __str__(self) -> str:
         return f"{self.title}"
-
 
 
 class CartItem(RandomIDModel, models.Model):
@@ -84,7 +80,7 @@ class Order(RandomIDModel, models.Model):
 
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     order_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=30, default=STATUS_CHOICES[PENDING], null=True, editable=False)
+    status = models.CharField(max_length=30, default=STATUS_CHOICES[PENDING], null=True)
 
     class Meta:
         verbose_name = "Order"

@@ -18,7 +18,7 @@ function ProductPage() {
     return <div>Loading...</div>;
   }
   return (
-    <>prin
+    <>
       <div className={`w-full flex justify-between flex-col px-6 laptop:px-24 items-center`}>
 
         <div className={`flex justify-center items-center flex-col laptop:flex-row mt-20`}>

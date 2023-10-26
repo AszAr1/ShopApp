@@ -2,7 +2,8 @@ from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework.authentication import *
-from rest_framework.viewsets import *
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Product, Favorite, CartItem, Order, OrderItem
 from .serializers import (ProductSerializer, 
@@ -15,9 +16,10 @@ from .serializers import (ProductSerializer,
 class MainAPIView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ['category'] 
+    search_fields = ['category', 'title', 'description']
+    ordering_fields = ['price']
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get('title')
@@ -45,13 +47,24 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = Favorite.objects.filter(user=request.user.id)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
     def delete(self, request, *args, **kwargs):
         obj_id = request.data.get('id')
         obj = {}
         if obj_id is None or obj_id == '':
             obj = Favorite.objects.filter(user=self.request.user.id)[0]
         else:
-            obj = Favorite.objects.filter(id=obj_id)[0]
+            obj = Favorite.objects.get(id=obj_id)
         self.perform_destroy(obj)
         data = request.data.copy()
         return Response(data=data, status=status.HTTP_204_NO_CONTENT)
@@ -117,6 +130,17 @@ class OrderAPIView(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = Order.objects.filter(customer=request.user.id)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class OrderItemAPIView(RetrieveAPIView):
     queryset = Order.objects.all()
@@ -125,7 +149,6 @@ class OrderItemAPIView(RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         queryset = OrderItem.objects.filter(order=kwargs['pk'])
-
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = OrderItemSerializer(page, many=True)
