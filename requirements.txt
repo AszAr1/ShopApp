@@ -4,4 +4,5 @@ Pillow
 mysqlclient
 django-cors-headers
 django-random-id-model
+django-filter
 sqlparse

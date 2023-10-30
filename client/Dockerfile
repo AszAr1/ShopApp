@@ -1,15 +1,14 @@
-FROM node:20
+FROM node
 
 WORKDIR "/docshopApp"
 
-COPY package*.json ./
+COPY package*.json .
+COPY yarn*.lock .
 
 RUN yarn install
 
 COPY . .
 
-RUN yarn run build
+RUN yarn build
 
-CMD [ "yarn", "run", "start" ]
-
-EXPOSE 3001
+EXPOSE 3000

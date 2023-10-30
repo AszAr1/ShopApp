@@ -24,7 +24,7 @@ class MainAPIView(ListCreateAPIView):
     def perform_create(self, serializer):
         title = serializer.validated_data.get('title')
         description = serializer.validated_data.get('description') or None
-        content = serializer.validated_data.get('content') or None
+        content = serializer.validated_data.get('content') or None 
         if content is None:
            content = title
         if description is None:

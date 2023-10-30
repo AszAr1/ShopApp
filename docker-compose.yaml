@@ -3,12 +3,12 @@ services:
   db:
     image: mydb
     ports:
-      - "3360:33060"
+      - "3360:3360"
     environment:
       - MYSQL_ROOT_PASSWORD=adsw1423@g
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=shopdb
-  web:
+  back:
     image: back
     command: python manage.py runserver 0.0.0.0:8000
     ports:
@@ -17,6 +17,12 @@ services:
       - MYSQL_HOST=db
     depends_on:
       - db
-    # volumes:
-    #   - ./backend:/shopApp/
-    
+    volumes:
+      - ./backend:/shopApp/
+  front:
+    image: front
+    command: yarn run start
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/docshopApp/
