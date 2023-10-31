@@ -99,14 +99,29 @@ export interface formProps {
   loginPage: boolean
 }
 
+interface userProps {
+  name: string,
+  email?: string,
+  password: string
+}
+
+export interface InfoProps {
+  username: string,
+    password: string,
+    email: string
+    first_name: string,
+    last_name: string,
+    profile_picture: null,
+    see_more: string,
+}
+
 export interface useAuthorizationProps {
   user: {
     name: string | null,
     email: string | null,
-    id: string | null | number,
   },
   login: boolean,
-  setUser: (name: string | null, email: string | null, id: string | number) => void,
+  setUser: (name: string, email:string | null) => void,
   removeUser: () => void
 }
 

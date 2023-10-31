@@ -20,7 +20,7 @@ export const useSneakers = create<useSneakersProps>(set => ({
 
   async getLimiteSneakers(limit, offset) {
     try {
-      const response = await axios.get('http://localhost:8000/products/sneakers/', {
+      const response = await axios.get('http://localhost:8000/products/sneakers', {
         params: { _limit: limit, _offset: offset },
       })
       set({ sneakers: await response.data })

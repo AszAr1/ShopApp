@@ -19,10 +19,10 @@ services:
       - db
     volumes:
       - ./backend:/shopApp/
-  front:
-    image: front
-    command: yarn run start
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./client:/docshopApp/
+  # front:
+  #   image: front
+  #   command: yarn run start
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./client/src:/docshopApp/src
