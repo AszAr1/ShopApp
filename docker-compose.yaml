@@ -25,4 +25,4 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./client:/docshopApp/
+      - ./client/src:/docshopApp/src

@@ -6,5 +6,6 @@ from uuid import uuid4
 class CustomUser(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     profile_picture = models.ImageField(null=True, blank=True)
+    email = models.EmailField(verbose_name=("email address"))
     # orders = models.ForeignKey(Order, default=None, on_delete=models.CASCADE)
     
