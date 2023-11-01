@@ -13,9 +13,9 @@ function Intro() {
             <source src="./bgVideo.mp4" type="video/mp4" />
           </video> */}
           <div className="absolute flex justify-center items-center flex-col">
-            <h1 className="text-white uppercase text-center text-5xl laptop:text-6xl font-bold">Welcome to Sneakers</h1>
-            <h1 className="text-white uppercase text-center text-3xl laptop:text-6xl font-bold py-4 laptop:py-10">You can show all you need</h1>
-            <Button className="flex justify-center items-center p-2 laptop:px-4 laptop:py-2
+            <h1 className="text-white uppercase text-center text-5xl desktop:text-6xl font-bold">Welcome to Sneakers</h1>
+            <h1 className="text-white uppercase text-center text-3xl desktop:text-6xl font-bold py-4 desktop:py-10">You can show all you need</h1>
+            <Button className="flex justify-center items-center p-2 desktop:px-4 laptop:py-2
                             bg-white text-black
                             transition duration-500 hover:scale-110
                             font-bold text-lg rounded-md

@@ -36,7 +36,7 @@ const RegistaerPage = () => {
 
   return (
     <div>
-        <Form loginPage={false} handleClick={handleClickRegister} title='Registration' underText={`Already have an account?`} underText2='Log in' link={'authorization'}/>
+        <Form loginPage={false} handleClick={handleClickRegister} title='Registration' underText={`Already have an account?`} underText2='Log in' link={'login'}/>
     </div>
   )
 }

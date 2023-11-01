@@ -11,9 +11,9 @@ const Profile = () => {
   }  
   return (
       <>
-          <div className='grid laptop:grid-cols-2 grid-cols-1 sm:grid-rows-2 sm:gap-4 gap-4 w-full h-full sm:p-10 p-2'>
+          <div className='grid laptop:grid-cols-2 grid-cols-1 laptop:grid-rows-2 laptop:gap-4 gap-4 w-full h-full laptop:p-10 p-2'>
 
-              <div className = "flex justify-center items-center border-2 border-solid border-black rounded-md sm:p-10 p-2 shadow-xl">
+              <div className = "flex justify-center items-center border-2 border-solid border-black rounded-md laptop:p-10 p-2 shadow-xl">
                   <div className="flex flex-col justify-center items-center">
                       <div className='w-[200px] h-[200px] relative overflow-hidden border-2 border-solid border-black rounded-full'>
                           <img className='absolute' src='https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80'/>

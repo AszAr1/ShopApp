@@ -67,10 +67,14 @@ function NavBar() {
       <a href={`/`} className={`block laptop:hidden font-bold text-2xl font-mono`}>Sneakers</a>
 
       <div className={`laptop:flex hidden justify-center items-center flex-row`}>
-        <button className={`p-2 w-[140px] bg-black rounded-md border-2 border-solid border-black
-          text-white font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}><Link to={'/login'}>Log In</Link></button>
-        <button className={`p-2 w-[140px] ml-5 bg-black rounded-md border-2 border-solid border-black
-          text-white font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}><Link to={'/register'}>Registration</Link></button>
+        <Link to={'/login'}>
+          <button className={`p-2 w-[140px] bg-black rounded-md border-2 border-solid border-black
+          text-white font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}>Log In</button>
+        </Link>
+        <Link to={'/register'}>
+          <button className={`p-2 w-[140px] ml-5 bg-black rounded-md border-2 border-solid border-black
+          text-white font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}>Register</button>
+        </Link>
       </div>
 
       <div className={`laptop:hidden flex justify-between items-center rounded-xl border-black border-2 shadow-md p-3
@@ -89,10 +93,14 @@ function NavBar() {
       </div>
 
       <div className={`${open ? 'block' : 'hidden'} flex justify-center items-center flex-col laptop:hidden bg-black p-6 absolute top-20 left-[201px] text-white rounded-xl`}>
-        <button className={`p-2 w-[140px] bg-white rounded-md border-2 border-solid border-black
-          text-black font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}><Link to={'/login'}>Log In</Link></button>
-        <button className={`p-2 w-[140px] mt-5 bg-white rounded-md border-2 border-solid border-black
-          text-black font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}><Link to={'/register'}>Registration</Link></button>
+        <button>
+          <Link to={'/login'} className={`p-2 w-[140px] bg-white rounded-md border-2 border-solid border-black
+          text-black font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}>
+            Log In
+          </Link>
+        </button>
+        <Link to={'/register'} className={`p-2 w-[140px] mt-5 bg-white rounded-md border-2 border-solid border-black
+          text-black font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}>Registration</Link>
       </div>
 
 

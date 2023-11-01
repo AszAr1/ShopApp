@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SneakersSizeProps } from "../../models/types";
+import { SneakersSizeProps } from "../../models/products";
 
 function SneakerSize({ children, className, sizes }: SneakersSizeProps) {
   const [activeSizes, setActiveSizes] = useState<boolean[]>(Array(sizes.length).fill(false));

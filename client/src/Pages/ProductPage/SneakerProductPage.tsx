@@ -19,18 +19,18 @@ function ProductPage() {
   }
   return (
     <>
-      <div className={`w-full flex justify-between flex-col px-6 laptop:px-24 items-center`}>
+      <div className={`w-full flex justify-between flex-col px-6 desktop:px-24 items-center`}>
 
-        <div className={`flex justify-center items-center flex-col laptop:flex-row mt-20`}>
+        <div className={`flex justify-center items-center flex-col desktop:flex-row mt-20`}>
 
-          <div className={`max-w-[600px] max-h-[800px] mr-0 laptop:mr-16 mb-10 laptop:mb-0
+          <div className={`max-w-[600px] max-h-[800px] mr-0 desktop:mr-16 mb-10 laptop:mb-0
                     overflow-hidden rounded-2xl border-4 border-black
                      `}>
             <img src={sneaker.image} alt={`product-image`} />
 
           </div>
 
-          <div className={`flex justify-center items-start max-w-auto laptop:max-w-[50%] min-h-[500px] flex-col
+          <div className={`flex justify-center items-start max-w-auto desktop:max-w-[50%] min-h-[500px] flex-col
                         border-2 p-4 border-black rounded-xl`}>
 
             <h1 className={`text-3xl font-extrabold py-4`}>{sneaker.title}</h1>
@@ -40,7 +40,7 @@ function ProductPage() {
 
               <h1 className={`mb-2 text-xl font-extrabold`}>*Размер(EUR)</h1>
 
-              <div className={`grid grid-cols-4 gap-4 md:grid-cols-5 mx-0 laptop:gap-3`}>
+              <div className={`grid grid-cols-5 gap-4 tablet:grid-cols-10 mx-0 laptop:gap-3`}>
                 <SneakerSize className={`hover:bg-red-200`} sizes={sneaker.sizes}></SneakerSize>
               </div>
 
