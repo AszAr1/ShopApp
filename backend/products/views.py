@@ -5,12 +5,14 @@ from rest_framework.authentication import *
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
+
 from .models import Product, Favorite, CartItem, Order, OrderItem
 from .serializers import (ProductSerializer, 
                           CartItemSerializer, 
                           FavoriteSerializer, 
                           OrderItemSerializer, 
                           OrderSerializer)
+
 
 
 class MainAPIView(ListCreateAPIView):
@@ -20,6 +22,21 @@ class MainAPIView(ListCreateAPIView):
     filterset_fields = ['category'] 
     search_fields = ['category', 'title', 'description']
     ordering_fields = ['price']
+
+    def filter_queryset(self, request, queryset):
+        return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(request, self.get_queryset())
+        
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get('title')
@@ -37,11 +54,39 @@ class HoodiesListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Hoodies')
     serializer_class = ProductSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        if 'filter' in request.query_params:
+            queryset = queryset[:int(request.query_params['filter'])]
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
+    
 
 class SneakersListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Sneakers')
     serializer_class = ProductSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        if 'filter' in request.query_params:
+            queryset = queryset[:int(request.query_params['filter'])]
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
+    
 
 class FavoritesAPIView(ListAPIView, DestroyAPIView):
     queryset = Favorite.objects.all()
