@@ -4,22 +4,18 @@ function Intro() {
   return (
     <>
       <div className="w-full">
-        <div className="w-full flex justify-center items-center overflow-hidden h-full">
+        <div className="flex items-center justify-center w-full h-full overflow-hidden">
           <img src='https://img.setka.io/clients/ERswQaPUWaeWgjb6hekcAkZGgz6Intd3/post_images/rednike-2022102719380146.jpg'
-            className=" hidden laptop:flex w-full h-screen relative" alt="image" />
+            className="relative hidden w-full h-screen laptop:flex" alt="image" />
           <img src={`https://oboi.ringtonz.ru/uploads/posts/2020-04/1585991149_krossovki_nogi_obuv_podsvetka_116317_1440x2560.jpg`} alt={"image"}
             className={`flex laptop:hidden`} />
-          {/* <video className="min-w-full min-h-screen absolute">
+          {/* <video className="absolute min-w-full min-h-screen">
             <source src="./bgVideo.mp4" type="video/mp4" />
           </video> */}
-          <div className="absolute flex justify-center items-center flex-col">
-            <h1 className="text-white uppercase text-center text-5xl laptop:text-6xl font-bold">Welcome to Sneakers</h1>
-            <h1 className="text-white uppercase text-center text-3xl laptop:text-6xl font-bold py-4 laptop:py-10">You can show all you need</h1>
-            <Button className="flex justify-center items-center p-2 laptop:px-4 laptop:py-2
-                            bg-white text-black
-                            transition duration-500 hover:scale-110
-                            font-bold text-lg rounded-md
-                        ">
+          <div className="absolute flex flex-col items-center justify-center">
+            <h1 className="text-5xl font-bold text-center text-white uppercase laptop:text-6xl">Welcome to Sneakers</h1>
+            <h1 className="py-4 text-3xl font-bold text-center text-white uppercase laptop:text-6xl laptop:py-10">You can show all you need</h1>
+            <Button className="flex items-center justify-center p-2 text-lg font-bold text-black transition duration-500 bg-white rounded-md laptop:px-4 laptop:py-2 hover:scale-110 ">
               Show more
             </Button>
           </div>
