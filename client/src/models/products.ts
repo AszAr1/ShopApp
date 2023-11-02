@@ -30,7 +30,7 @@ export interface useSneakersProps {
     sneaker: ProductsProps | null,
     loading: boolean,
     getSneakers: () => void,
-    getLimiteSneakers: (limit: number, offset: number) => void,
+    getLimitedSneakers: (limit: number) => void,
     getOneSneaker: (producTitle: string | undefined) => void
   }
   
@@ -39,6 +39,6 @@ export interface useSneakersProps {
     hoodie: ProductsProps | null,
     loading: boolean,
     getHoodies: () => void,
-    getLimitedHoodies: (limit: number, offset: number) => void,
-    getOneHoodie: (productId: string | undefined) => void
+    getLimitedHoodies: (limit: number) => void,
+    getOneHoodie: (id: string | undefined) => void
   }

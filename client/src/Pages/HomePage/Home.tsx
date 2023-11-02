@@ -9,13 +9,13 @@ import { useHoodies } from "../../stores/hoodies";
 function Home() {
 
   const sneakers = useSneakers(state => state.sneakers)
-  const getSneakers = useSneakers(state => state.getLimiteSneakers)
+  const getSneakers = useSneakers(state => state.getLimitedSneakers)
   const hoodies = useHoodies(state => state.hoodies)
   const getHoodies = useHoodies(state => state.getLimitedHoodies)
   
   useEffect(() => {
-    getHoodies(6,0)
-    getSneakers(6, 0)
+    getHoodies(6)
+    getSneakers(6)
   }, [])
 
   return (

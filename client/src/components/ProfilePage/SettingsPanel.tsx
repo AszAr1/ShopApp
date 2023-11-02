@@ -8,7 +8,7 @@ interface SettingsPanel {
 
 const SettingsPanel:FC<SettingsPanel> = (props) => {
 
-  const removeUser = useAuthorization(state => state.removeUser)
+  const removeUser = useAuthorization(state => state.logout)
   const push = useNavigate()
 
   const logOut = () => {
