@@ -4,6 +4,7 @@ from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework.authtoken.views import ObtainAuthToken 
 from rest_framework.authtoken.models import Token 
+from rest_framework.authtoken.serializers import AuthTokenSerializer
 
 from .models import CustomUser
 from .serializers import CustomUserSerializer
@@ -20,6 +21,7 @@ class CustomUserRegistrationAPIView(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
+        headers['Access-Control-Allow-Credentials'] = True
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
@@ -47,6 +49,16 @@ class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
+    
+class CustomUserLogOutAPIView(DestroyAPIView):
+    queryset = Token.objects.all()
+    serializer_class = AuthTokenSerializer
+
+    def delete(self, request, *args, **kwargs):
+        instance = Token.objects.filter(request.data['token'])[0]
+
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
 
 class CustomUserAPIView(ListAPIView):
