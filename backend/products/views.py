@@ -78,8 +78,6 @@ class SneakersListAPIView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(request, self.get_queryset())
-        if 'filter' in request.query_params:
-            queryset = queryset[:int(request.query_params['filter'])]
 
         page = self.paginate_queryset(queryset)
         if page is not None:
