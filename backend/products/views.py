@@ -5,7 +5,6 @@ from rest_framework.authentication import *
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
-
 from .models import Product, Favorite, CartItem, Order, OrderItem
 from .serializers import (ProductSerializer, 
                           CartItemSerializer, 
