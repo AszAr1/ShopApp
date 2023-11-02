@@ -1,29 +1,27 @@
 import { create } from "zustand"
-import axios from "axios";
 import { useSneakersProps } from "../models/products";
+import { SneakersService } from "../service/SneakersService";
 
 export const useSneakers = create<useSneakersProps>(set => ({
   sneakers: [],
   sneaker: null,
   loading: true,
+
   async getSneakers() {
-    try {
-      const response = await axios.get('http://localhost:8000/products/sneakers/')
-      console.log(response.data)
-      set({ sneakers: await response.data })
-    } catch (error) {
-      console.error('Ошибка при получении данных с сервера:', error)
+    try{
+      SneakersService.getSneakers().then(response => set({sneakers: response.data}))
+    } catch (e){
+      console.error(e)
+      set({ sneakers: [] })
     } finally {
       set({ loading: false })
     }
   },
 
-  async getLimiteSneakers(limit, offset) {
+  async getLimitedSneakers(limit) {
     try {
-      const response = await axios.get('http://localhost:8000/products/sneakers', {
-        params: { _limit: limit, _offset: offset },
-      })
-      set({ sneakers: await response.data })
+      SneakersService.getLimitedSneakers(limit)
+      .then(response => set({sneakers: response.data}))
     } catch (error) {
       console.error('Ошибка при получении данных с сервера:', error)
       set({ sneakers: [] })
@@ -34,12 +32,11 @@ export const useSneakers = create<useSneakersProps>(set => ({
 
   async getOneSneaker(id) {
     try {
-      const response = await axios.get(`http://localhost:8000/products/${id}`)
-      set({ sneaker: response.data })
-    } catch (error) {
-      console.error('Ошибка при получении данных с сервера:', error)
+      SneakersService.getOneSneaker(id).then(response => set({sneaker: response.data}))
+    } catch (e){
+      console.error(e)
     } finally {
-      set({ loading: false })
+      set({loading: false})
     }
   }
 

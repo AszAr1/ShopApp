@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const RegistaerPage = () => {
 
-  const register = useAuthorization(state => state.setUser)
+  const register = useAuthorization(state => state.registration)
 
   const push = useNavigate()
 
@@ -19,19 +19,7 @@ const RegistaerPage = () => {
     //       push('/')
     //     })
     //     .catch(console.error)
-    const user = {
-      username: name,
-      email: email,
-      password: password
-    }
-    
-    axios.post('http://127.0.0.1:8000/user/signup/', user)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
+    register(name, email, password)
   }
 
   return (
