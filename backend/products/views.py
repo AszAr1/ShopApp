@@ -54,10 +54,11 @@ class HoodiesListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Hoodies')
     serializer_class = ProductSerializer
 
+    def filter_queryset(self, request, queryset):
+        return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
+
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        if 'filter' in request.query_params:
-            queryset = queryset[:int(request.query_params['filter'])]
+        queryset = self.filter_queryset(request, self.get_queryset())
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -73,8 +74,11 @@ class SneakersListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Sneakers')
     serializer_class = ProductSerializer
 
+    def filter_queryset(self, request, queryset):
+        return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
+
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.filter_queryset(request, self.get_queryset())
         if 'filter' in request.query_params:
             queryset = queryset[:int(request.query_params['filter'])]
 
@@ -138,6 +142,7 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
+        print(request.data)
         data = self.request.data.copy()
         data['user'] = request.user.id
         print(data['user'])
