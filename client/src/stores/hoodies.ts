@@ -1,6 +1,6 @@
 import axios from "axios";
 import { create } from "zustand";
-import { useHoodiesProps } from "../models/types";
+import { useHoodiesProps } from "../models/products";
 
 export const useHoodies = create<useHoodiesProps>(set => ({
     hoodies: [],

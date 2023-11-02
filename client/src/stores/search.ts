@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import axios from "axios";
-import { useSearchProps } from "../models/types";
+import { useSearchProps } from "../models/useSearchProps";
 
 export const useSearch = create<useSearchProps>(set => ({
     products: [],
