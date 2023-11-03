@@ -1,3 +1,2 @@
-/client
-/shopenv
-.gitignore
+/backend
+/client/node_modules

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { config } from "process";
 
 export const API_URL = `http://localhost:8000`
 
@@ -10,7 +9,7 @@ const $api = axios.create({
 
 $api.interceptors.request.use( (config) => {
     config.headers.Authorization = `Bearer  ${localStorage.getItem('token')}`
-    return config
+    return config;
 })
 
 export default $api
