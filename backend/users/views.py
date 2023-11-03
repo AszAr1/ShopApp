@@ -3,8 +3,8 @@ from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.authtoken.models import Token 
-from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from .models import CustomUser
 from .serializers import CustomUserSerializer
@@ -33,14 +33,8 @@ class CustomUserRegistrationAPIView(CreateAPIView):
 class CustomUserAuthorizationAPIView(TokenObtainPairView):
     def post(self, request, *args, **kwargs) -> Response:
         serializer = self.get_serializer(data=request.data)
-        
-        try:
-            serializer.is_valid(raise_exception=True)
-            
-        except TokenError as e:
-            raise InvalidToken(e.args[0])
+        serializer.is_valid(raise_exception=True)
 
-        print(serializer.validated_data)
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
     
     
@@ -55,16 +49,22 @@ class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
     
-class CustomUserLogOutAPIView(DestroyAPIView):
-    queryset = Token.objects.all()
-    serializer_class = AuthTokenSerializer
-
-    def delete(self, request, *args, **kwargs):
-        instance = Token.objects.filter(request.data['token'])[0]
-
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
     
+
+class CustomUserLogOutAPIView(DestroyAPIView):
+    serializer_class = TokenRefreshSerializer
+    permission_classes = (IsAuthenticated,)
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()   
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class CustomUserAPIView(ListAPIView):
     queryset = CustomUser.objects.all()
