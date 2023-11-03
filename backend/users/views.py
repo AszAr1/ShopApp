@@ -2,10 +2,10 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
-from rest_framework.authtoken.views import ObtainAuthToken 
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.authtoken.models import Token 
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from .models import CustomUser
 from .serializers import CustomUserSerializer
 
@@ -16,27 +16,32 @@ class CustomUserRegistrationAPIView(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
+        print(data)
         data['password'] = make_password(data['password'])
+        print(data)
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        headers['Access-Control-Allow-Credentials'] = True
+        headers['Access-Control-Allow-Origin'] = True
+        print(headers)
+
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class CustomUserAuthorizationAPIView(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        data = request.data.copy()
-        if 'email' in data.keys() and not 'username' in data.keys():
-            obj = CustomUser.objects.filter(email=data['email'])[0]
-            data['username'] = obj.username
+class CustomUserAuthorizationAPIView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs) -> Response:
+        serializer = self.get_serializer(data=request.data)
+        
+        try:
+            serializer.is_valid(raise_exception=True)
+            
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
 
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        print(serializer.validated_data)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
     
     
 class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
