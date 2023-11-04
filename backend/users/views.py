@@ -16,28 +16,27 @@ class CustomUserRegistrationAPIView(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
-        print(data)
         data['password'] = make_password(data['password'])
-        print(data)
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         headers['Access-Control-Allow-Origin'] = True
-        print(headers)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class CustomUserAuthorizationAPIView(TokenObtainPairView):
     def post(self, request, *args, **kwargs) -> Response:
+        user = CustomUser.objects.get(username=request.data['username'])
+        user_data = {'username': user.username, 'email': user.email, 'profile-picture': user.profile_picture or None}
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        print(serializer.validated_data)
-
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        data = serializer.validated_data.copy()
+        data['user'] = user_data
+        return Response(data=data, status=status.HTTP_200_OK)
     
     
 class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
