@@ -5,7 +5,6 @@ from rest_framework.permissions import *
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from .models import CustomUser
 from .serializers import CustomUserSerializer
 
