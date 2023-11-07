@@ -22,11 +22,10 @@ class MainAPIView(ListCreateAPIView):
     search_fields = ['category', 'title', 'description']
     ordering_fields = ['price']
 
-    def filter_queryset(self, request, queryset):
-        return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
-
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(request, self.get_queryset())
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
+
         
         page = self.paginate_queryset(queryset)
         if page is not None:
