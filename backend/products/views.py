@@ -13,7 +13,6 @@ from .serializers import (ProductSerializer,
                           OrderSerializer)
 
 
-
 class MainAPIView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -21,6 +20,7 @@ class MainAPIView(ListCreateAPIView):
     filterset_fields = ['category'] 
     search_fields = ['category', 'title', 'description']
     ordering_fields = ['price']
+    # permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -33,8 +33,10 @@ class MainAPIView(ListCreateAPIView):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-
-        return Response(serializer.data)
+        data = serializer.data.copy()
+        # data.insert(0, {})
+        data.insert(0, self.request.user.is_authenticated)
+        return Response(data)
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get('title')

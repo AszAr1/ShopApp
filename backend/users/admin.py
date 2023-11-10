@@ -8,4 +8,4 @@ class CumstomUserAdmin(UserAdmin):
     pass
 
 
-admin.site.register(CustomUser, CumstomUserAdmin)
+admin.site.register(CustomUser, CumstomUserAdmin)   

@@ -3,10 +3,11 @@ from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework.views import APIView
-from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+
 from .models import CustomUser
 from .serializers import CustomUserSerializer
 
@@ -29,11 +30,11 @@ class CustomUserRegistrationAPIView(CreateAPIView):
 class CustomUserAuthorizationAPIView(TokenObtainPairView):
     def post(self, request, *args, **kwargs) -> Response:
         user = CustomUser.objects.get(username=request.data['username'])
-        user_data = {'username': user.username, 'email': user.email, 'profile-picture': user.profile_picture or None}
+        user_data = {'username': user.username, 'email': user.email, 'profile-picture': user.profile_picture.url or None}
         print(user_data)
         serializer = self.get_serializer(data=request.data)
+        # print("hey")
         serializer.is_valid(raise_exception=True)
-
         data = serializer.validated_data.copy()
         data['user'] = user_data
         return Response(data=data, status=status.HTTP_200_OK)
@@ -53,21 +54,6 @@ class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
     
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
-    
-
-class CustomUserLogOutAPIView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh"]
-            print(refresh_token)
-            token = RefreshToken(token=refresh_token)
-            print(token)
-            token.blacklist()   
-            return Response(data={'status': 205}, status=status.HTTP_205_RESET_CONTENT)
-        except TokenError:
-            return Response(data={'status': 400}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomUserAPIView(ListAPIView):
