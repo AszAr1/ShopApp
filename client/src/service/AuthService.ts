@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { AuthResponse } from "../models/authResponse";
 import $api from "../API";
 
@@ -8,8 +8,8 @@ export default class AuthService {
             "username": username,
             "password": password
         }
-        const response = $api.post<AuthResponse>('/user/login/', user)
-        localStorage.setItem('token', (await response).data.acces)
+        const response = $api.post<AuthResponse>('/login/', user)
+        localStorage.setItem('token', (await response).data.access)
         return response
     }
 
@@ -20,7 +20,7 @@ export default class AuthService {
             "password": password
         }
         const response = $api.post<AuthResponse>('/signup/', user)
-        console.log(localStorage.setItem('token', (await response).data.acces))
+        console.log(localStorage.setItem('token', (await response).data.access))
         return response
     }
 

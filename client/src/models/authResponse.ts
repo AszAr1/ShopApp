@@ -1,5 +1,5 @@
 export interface AuthResponse {
-    acces: string,
+    access: string,
     refresh: string,
     user: UserProps
 }
