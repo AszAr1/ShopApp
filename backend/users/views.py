@@ -17,6 +17,7 @@ class CustomUserRegistrationAPIView(CreateAPIView):
     serializer_class = CustomUserSerializer
 
     def create(self, request, *args, **kwargs):
+        print(self.request.headers)
         data = request.data.copy()
         data['password'] = make_password(data['password'])
         serializer = self.get_serializer(data=data)
@@ -30,10 +31,13 @@ class CustomUserRegistrationAPIView(CreateAPIView):
 class CustomUserAuthorizationAPIView(TokenObtainPairView):
     def post(self, request, *args, **kwargs) -> Response:
         user = CustomUser.objects.get(username=request.data['username'])
-        user_data = {'username': user.username, 'email': user.email, 'profile-picture': user.profile_picture.url or None}
-        print(user_data)
+        try:
+            profile_picture = user.profile_picture.url
+        except ValueError:
+            profile_picture = None
+        user_data = {'username': user.username, 'email': user.email, 'profile-picture': profile_picture or None}
+        print(request.data)
         serializer = self.get_serializer(data=request.data)
-        # print("hey")
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data.copy()
         data['user'] = user_data
