@@ -5,13 +5,14 @@ export interface useAuthorizationProps {
       username: string | null,
       email: string | null,
     },
+    isRegister: boolean,
     login: boolean,
-    loginUser:(name: string, email: string, password: string) => void,
-    registration: (name: string, email: string, password: string) => void,
+    loginUser:(user:User) => void,
+    registration: (name: string, email: string) => void,
     logout: () => void
 }
 
-export interface InfoProps {
+export interface User {
     username: string,
     password: string,
     email: string

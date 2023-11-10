@@ -1,17 +1,15 @@
 import React from 'react'
 import Form from '../../components/UI/Form'
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useAuthorization } from '../../stores/authorization';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import AuthService from '../../service/AuthService';
 
 const RegistaerPage = () => {
-
+  const navigate = useNavigate()
   const register = useAuthorization(state => state.registration)
+  const login = useAuthorization(state => state.login)
 
-  const push = useNavigate()
-
-  const handleClickRegister = (name:string, email:string, password:string) => {
+  const handleClickRegister = async (name:string, email:string, password:string) => {
     // const auth = getAuth();
     // createUserWithEmailAndPassword(auth, email, password)
     //     .then(({user}) => {
@@ -19,7 +17,16 @@ const RegistaerPage = () => {
     //       push('/')
     //     })
     //     .catch(console.error)
-    register(name, email, password)
+      AuthService.register(name, email, password)
+      .then(() => {
+        register(name, email)
+        navigate("/")
+      })
+      .catch(console.error)
+  }
+
+  if(login){
+    setTimeout(() => navigate('/'), 1000)
   }
 
   return (
@@ -30,3 +37,5 @@ const RegistaerPage = () => {
 }
 
 export default RegistaerPage
+
+

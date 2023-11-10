@@ -1,6 +1,6 @@
 export interface AuthResponse {
-    accesToken: string,
-    refreshToken: string,
+    acces: string,
+    refresh: string,
     user: UserProps
 }
 

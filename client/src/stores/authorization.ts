@@ -1,19 +1,17 @@
 import { create } from "zustand"
-import { InfoProps, useAuthorizationProps } from "../models/authProps"
+import { useAuthorizationProps } from "../models/authProps"
 import { devtools, persist } from "zustand/middleware"
-import axios from "axios"
 import AuthService from "../service/AuthService"
-
-
 
 export const useAuthorization = create<useAuthorizationProps>()(devtools(persist((set => ({
   user: {
     username: null,
     email: null
   },
+  isRegister: false,
   login: false,
 
-  async loginUser(name, email, password) {
+  async loginUser(user) {
 
     // const user = {
     //   username: name,
@@ -45,19 +43,30 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
     //   })
 
     try{
-      const response = await AuthService.login(name, password)
-      localStorage.setItem('token', response.data.accesToken)
-      set({user: response.data.user})
+      // const response = await AuthService.login(name, password)
+      set({
+        user: {
+          username: user.username,
+          email: user.email
+        },
+        login: true
+      })
     } catch (e){
       console.error(e)
     }
   },
 
-  async registration (name, email, password){
+  async registration (name, email){
     try{
-      const response = await AuthService.register(name, email, password)
-      localStorage.setItem('token', response.data.accesToken)
-      set({user: response.data.user})
+      // const response = await AuthService.register(name, email, password)
+      
+      set({
+        user: {
+          username: name,
+          email: email
+        },
+        login: true
+      })
     } catch (e){
       console.error(e)
     }
@@ -65,16 +74,18 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
 
   async logout () {
     try{
-      const response = await AuthService.logout()
-      localStorage.removeItem('token')
+      // const response = await AuthService.logout()
+      // localStorage.removeItem('token')
       set({user: {
         username: null,
         email: null
-      } })
+      },
+      login: false
+    })
     } catch (e){
       console.error(e)
     }
   }
 
 
-})), { name: 'user2', version: 2 })))
+})), { name: 'user', version: 1 })))

@@ -92,17 +92,16 @@ function NavBar() {
 
       </div>
 
-      <div className={`${open ? 'block' : 'hidden'} flex justify-center items-center flex-col laptop:hidden bg-black p-6 absolute top-20 left-[201px] text-white rounded-xl`}>
+      <div className={`${open ? 'block' : 'hidden'} flex justify-center items-center flex-col laptop:hidden bg-black p-6 absolute top-20 right-4 text-white rounded-xl`}>
         <button>
-          <Link to={'/login'} className={`p-2 w-[140px] bg-white rounded-md border-2 border-solid border-black
+          <Link to={'/login'} className={`p-2 px-9 w-full bg-white rounded-md border-2 border-solid border-black
           text-black font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}>
-            Log In
+              Log in
           </Link>
         </button>
-        <Link to={'/register'} className={`p-2 w-[140px] mt-5 bg-white rounded-md border-2 border-solid border-black
+        <Link to={'/register'} className={`p-2 w-full mt-5 bg-white rounded-md border-2 border-solid border-black
           text-black font-bold font-mono duration-300 transition hover:bg-white hover:text-black hover:scale-105`}>Registration</Link>
       </div>
-
 
     </div>
   )

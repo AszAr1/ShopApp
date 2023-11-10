@@ -8,7 +8,9 @@ export default class AuthService {
             "username": username,
             "password": password
         }
-        return $api.post<AuthResponse>('/user/login/', user)
+        const response = $api.post<AuthResponse>('/user/login/', user)
+        localStorage.setItem('token', (await response).data.acces)
+        return response
     }
 
     static async register(username: string, email: string, password: string): Promise<AxiosResponse<AuthResponse>> {
@@ -17,7 +19,9 @@ export default class AuthService {
             "email": email,
             "password": password
         }
-        return $api.post<AuthResponse>('/user/signup/', user)
+        const response = $api.post<AuthResponse>('/signup/', user)
+        console.log(localStorage.setItem('token', (await response).data.acces))
+        return response
     }
 
     static async logout(): Promise<void> {
