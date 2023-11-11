@@ -9,7 +9,7 @@ export default class AuthService {
             "password": password
         }
         const response = $api.post<AuthResponse>('/login/', user)
-        localStorage.setItem('token', (await response).data.access)
+        console.log((await response).data.access)
         return response
     }
 
@@ -25,6 +25,6 @@ export default class AuthService {
     }
 
     static async logout(): Promise<void> {
-        return $api.post('/user/logout/')
+        return $api.post('/logout/')
     }
 }

@@ -6,13 +6,14 @@ import { useNavigate } from 'react-router-dom';
 const LoginPage = () => {
 
   const login = useAuthorization(state => state.loginUser)
-  const push = useNavigate()
+  const navigate = useNavigate()
   const loginService = AuthService.login
 
   const handleClickLogin = (name: string, email: string, password: string) => {
-    loginService(name, email)
+    loginService(name, password)
     .then((data)=> {
       login(data.data.user)
+      navigate('/')
     })
     .catch((e) => console.error(e))
   }
