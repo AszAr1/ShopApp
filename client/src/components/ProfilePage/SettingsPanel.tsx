@@ -1,6 +1,7 @@
 import { FC } from "react"
 import { useAuthorization } from "../../stores/authorization"
 import { useNavigate } from "react-router-dom"
+import AuthService from "../../service/AuthService"
 
 interface SettingsPanel {
   activeComponentRender: (component: string) => void
@@ -8,12 +9,18 @@ interface SettingsPanel {
 
 const SettingsPanel:FC<SettingsPanel> = (props) => {
 
+  const logout = AuthService.logout;
   const removeUser = useAuthorization(state => state.logout)
   const push = useNavigate()
 
   const logOut = () => {
     removeUser()
     push('/')
+    logout().then(() => {
+      
+      
+    })
+    .catch((e) => console.log(e))
   }
 
   return (
