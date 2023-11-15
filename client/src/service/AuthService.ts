@@ -3,13 +3,14 @@ import { AuthResponse } from "../models/authResponse";
 import $api from "../API";
 
 export default class AuthService {
+
     static async login(username: string, password: string): Promise<AxiosResponse<AuthResponse>> {
         const user = {
             "username": username,
             "password": password
         }
         const response = $api.post<AuthResponse>('/login/', user)
-        console.log((await response).data.access)
+        localStorage.setItem('token', (await response).data.access)
         return response
     }
 
@@ -20,7 +21,7 @@ export default class AuthService {
             "password": password
         }
         const response = $api.post<AuthResponse>('/signup/', user)
-        console.log(localStorage.setItem('token', (await response).data.access))
+        localStorage.setItem('token', (await response).data.access)
         return response
     }
 

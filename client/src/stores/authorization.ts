@@ -11,39 +11,10 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
   isRegister: false,
   login: false,
 
-  async loginUser(user) {
-
-    // const user = {
-    //   username: name,
-    //   password: password
-    // }
-
-    // const resonse = axios.post('http://127.0.0.1:8000/user/login/', user)
-    //   .then(function (response) {
-    //     const info = axios.get<InfoProps>(`http://127.0.0.1:8000/user/${user.username}`)
-    //       .then(
-    //         function (info) {
-    //           set({
-    //             user: {
-    //               name: info.data.username,
-    //               email: info.data.email,
-    //             },
-    //             login: true
-    //           })
-    //         }
-    //       ).catch(
-    //         function (e) {
-    //           console.error(e)
-    //         }
-    //       )
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   })
-
+  async loginUser(user, access) {
     try{
       // const response = await AuthService.login(name, password)
+      localStorage.setItem('token', access)
       set({
         user: {
           username: user.username,
@@ -56,10 +27,10 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
     }
   },
 
-  async registration (name, email){
+  async registration (name, email, access){
     try{
       // const response = await AuthService.register(name, email, password)
-      
+      localStorage.setItem('token', access)
       set({
         user: {
           username: name,
@@ -75,7 +46,6 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
   async logout () {
     try{
       // const response = await AuthService.logout()
-      // localStorage.removeItem('token')
       set({user: {
         username: null,
         email: null

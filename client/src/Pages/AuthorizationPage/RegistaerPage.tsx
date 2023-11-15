@@ -18,8 +18,8 @@ const RegistaerPage = () => {
     //     })
     //     .catch(console.error)
       AuthService.register(name, email, password)
-      .then(() => {
-        register(name, email)
+      .then((data) => {
+        register(name, email, data.data.access)
         navigate("/")
       })
       .catch(console.error)
