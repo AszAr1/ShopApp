@@ -17,7 +17,6 @@ class CustomUserRegistrationAPIView(CreateAPIView):
     serializer_class = CustomUserSerializer
 
     def create(self, request, *args, **kwargs):
-        print(self.request.headers)
         data = request.data.copy()
         data['password'] = make_password(data['password'])
         serializer = self.get_serializer(data=data)
@@ -44,7 +43,6 @@ class CustomUserAuthorizationAPIView(TokenObtainPairView):
         return Response(data=data, status=status.HTTP_200_OK)
     
     
-
 class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer

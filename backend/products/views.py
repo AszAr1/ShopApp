@@ -4,6 +4,8 @@ from rest_framework.permissions import *
 from rest_framework.authentication import *
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken 
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken 
 
 from .models import Product, Favorite, CartItem, Order, OrderItem
 from .serializers import (ProductSerializer, 
@@ -35,7 +37,7 @@ class MainAPIView(ListCreateAPIView):
         serializer = self.get_serializer(queryset, many=True)
         data = serializer.data.copy()
         # data.insert(0, {})
-        data.insert(0, self.request.user.is_authenticated)
+        # data.insert(0, self.request.user.is_authenticated)
         return Response(data)
 
     def perform_create(self, serializer):
@@ -95,6 +97,7 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
     serializer_class = FavoriteSerializer
 
     def list(self, request, *args, **kwargs):
+        print(request.user.id)
         queryset = Favorite.objects.filter(user=request.user.id)
 
         page = self.paginate_queryset(queryset)
