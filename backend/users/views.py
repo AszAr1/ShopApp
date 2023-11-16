@@ -2,10 +2,6 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
-from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from .models import CustomUser
@@ -17,6 +13,7 @@ class CustomUserRegistrationAPIView(CreateAPIView):
     serializer_class = CustomUserSerializer
 
     def create(self, request, *args, **kwargs):
+        print('Hello')
         data = request.data.copy()
         data['password'] = make_password(data['password'])
         serializer = self.get_serializer(data=data)
