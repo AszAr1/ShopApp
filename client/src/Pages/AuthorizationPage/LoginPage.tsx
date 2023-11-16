@@ -12,7 +12,7 @@ const LoginPage = () => {
   const handleClickLogin = (name: string, email: string, password: string) => {
     loginService(name, password)
     .then((data)=> {
-      login(data.data.user)
+      login(data.data.user, data.data.access)
       navigate('/')
     })
     .catch((e) => console.error(e))
