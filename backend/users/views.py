@@ -26,9 +26,9 @@ class CustomUserRegistrationAPIView(CreateAPIView):
         except ValueError:
             profile_picture = None
         user_data = {'username': user.username, 'email': user.email, 'profile-picture': profile_picture or None}
-        token = TokenObtainPairSerializer().validate({'username': request.data['username'], 'password': request.data['password']})
-        token['user'] = user_data
-        return Response(token, status=status.HTTP_201_CREATED, headers=headers)
+        token_data = TokenObtainPairSerializer().validate({'username': request.data['username'], 'password': request.data['password']})
+        token_data['user'] = user_data
+        return Response(token_data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class CustomUserAuthorizationAPIView(TokenObtainPairView):

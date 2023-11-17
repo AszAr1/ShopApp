@@ -5,7 +5,6 @@ from rest_framework.authentication import *
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken 
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken 
 
 from .models import Product, Favorite, CartItem, Order, OrderItem
 from .serializers import (ProductSerializer, 
@@ -22,7 +21,6 @@ class MainAPIView(ListCreateAPIView):
     filterset_fields = ['category'] 
     search_fields = ['category', 'title', 'description']
     ordering_fields = ['price']
-    # permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -161,12 +159,13 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
         return Response(data=data, status=status.HTTP_204_NO_CONTENT)
 
 
-class CartAPIView(ListAPIView):
+class CartAPIView(ListCreateAPIView):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer 
 
     def list(self, request, *args, **kwargs):
         queryset = CartItem.objects.filter(user=request.user.id)
+        # queryset = CartItem.objects.all()
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -175,6 +174,24 @@ class CartAPIView(ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    def post(self, request, *args, **kwargs):
+        order_serializer = OrderSerializer(data={'customer': request.user.id})
+        order_serializer.is_valid(raise_exception=True)
+        self.perform_create(order_serializer)
+        headers = self.get_success_headers(order_serializer.validated_data)
+        cart_items = CartItem.objects.filter(user=request.user.id)
+        order_id = Order.objects.last().id
+
+        for item in cart_items:
+            item_data = {"product": item.product.id, 'quantity': item.quantity, 'order': order_id}
+            order_item_serializer = OrderItemSerializer(data=item_data)
+            order_item_serializer.is_valid(raise_exception=True)
+            self.perform_create(order_item_serializer)
+
+        CartItem.objects.all().delete()
+
+        return Response({}, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class OrderAPIView(ListAPIView):
