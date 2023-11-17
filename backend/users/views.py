@@ -2,7 +2,8 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import CustomUser
 from .serializers import CustomUserSerializer
@@ -13,15 +14,21 @@ class CustomUserRegistrationAPIView(CreateAPIView):
     serializer_class = CustomUserSerializer
 
     def create(self, request, *args, **kwargs):
-        print('Hello')
         data = request.data.copy()
         data['password'] = make_password(data['password'])
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        user = CustomUser.objects.get(username=request.data['username'])
+        try:
+            profile_picture = user.profile_picture.url
+        except ValueError:
+            profile_picture = None
+        user_data = {'username': user.username, 'email': user.email, 'profile-picture': profile_picture or None}
+        token = TokenObtainPairSerializer().validate({'username': request.data['username'], 'password': request.data['password']})
+        token['user'] = user_data
+        return Response(token, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class CustomUserAuthorizationAPIView(TokenObtainPairView):
@@ -32,7 +39,7 @@ class CustomUserAuthorizationAPIView(TokenObtainPairView):
         except ValueError:
             profile_picture = None
         user_data = {'username': user.username, 'email': user.email, 'profile-picture': profile_picture or None}
-        print(request.data)
+        print(request.data) 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data.copy()
