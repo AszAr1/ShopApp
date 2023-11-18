@@ -51,6 +51,7 @@ class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     lookup_field = 'username'
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
