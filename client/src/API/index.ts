@@ -18,7 +18,8 @@ export const API_URL = `http://localhost:8000`
 export const $api = axios.create({
     baseURL: API_URL,
     headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}` === `Bear ` + null ? '' : `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}` === `Bearer `  + null || `Bearer ${localStorage.getItem('token')}` === `Bearer `  + undefined ? '' : `Bearer ${localStorage.getItem('token')}`,
+
     }
 })
 
