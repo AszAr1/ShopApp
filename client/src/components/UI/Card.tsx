@@ -3,21 +3,25 @@ import Button from "./Button";
 import { Link } from 'react-router-dom';
 import {AiOutlineStar} from 'react-icons/ai'
 import { useFavorite } from "../../stores/favorite";
+import { FavoritesService } from "../../service/FavoritesService";
 
 //@ts-ignore
 function Card ({product}) {
 
     const favorites = useFavorite(state => state.favorites);
     const isFavorite = favorites.some(item => item.id === product.id);
-    const favoriteAdd = useFavorite(state => state.addFavorite)
     const removeFavorite = useFavorite(state => state.deleteFavorite)
+    const setFavorites = useFavorite(state => state.setFavorite)
 
 
-    function toggleFavorite(productId: number, productType: string) {
+    function toggleFavorite(productId: string) {
         if (isFavorite) {
             removeFavorite(productId);
         } else {
-            favoriteAdd(productId, productType);
+            console.log(productId)
+            FavoritesService.addFavorites(productId)
+            .then(data => setFavorites(data.data))
+            .catch(e => console.error(e))
         }
     }
 
@@ -51,7 +55,7 @@ function Card ({product}) {
                          <button className="bg-black shadow-md border-2 border-black text-white px-3 py-2 font-bold mt-5
                              transition duration-500 hover:bg-white hover:text-black
                          "
-                         onClick={() => toggleFavorite(product.id, product.category)}
+                         onClick={() => toggleFavorite(product.id)}
                          >
                             <AiOutlineStar className="text-2xl font-bold"/>
                          </button>

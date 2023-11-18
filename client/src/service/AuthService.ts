@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
-import { AuthResponse } from "../models/authResponse";
-import $api from "../API";
+import { AuthResponse, UserProps } from "../models/authResponse";
+import { $api } from "../API";
+
 
 export default class AuthService {
 
@@ -9,8 +10,9 @@ export default class AuthService {
             "username": username,
             "password": password
         }
-        const response = $api.post<AuthResponse>('/login/', user)
-        localStorage.setItem('token', (await response).data.access)
+        const response = await $api.post<AuthResponse>('/login/', user)
+        localStorage.setItem('token', response.data.access)
+        localStorage.setItem('refreshToken', response.data.refresh)
         return response
     }
 
@@ -20,12 +22,26 @@ export default class AuthService {
             "email": email,
             "password": password
         }
-        const response = $api.post<AuthResponse>('/signup/', user)
-        localStorage.setItem('token', (await response).data.access)
-        return response
+        try {
+            const response = await $api.post<AuthResponse>('/signup/', user)
+            localStorage.setItem('token', response.data.access)
+            localStorage.setItem('refreshToken', response.data.refresh)
+            localStorage.setItem('username', response.data.user.username)
+            return response
+          } catch (error) {
+            console.error('Registration error:', error)
+            throw error
+          }
     }
 
     static async logout(): Promise<void> {
-        return $api.post('/logout/')
+        console.log(localStorage.getItem('refreshToken'))
+        return $api.post('/logout/', localStorage.getItem('refreshToken'))
+    }
+
+    static async getProfile(username:string | null): Promise<AxiosResponse<AuthResponse>> {
+        
+        const response = await $api.get<AuthResponse>(`/profile/${username}`)
+        return response
     }
 }

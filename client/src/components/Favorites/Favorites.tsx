@@ -1,15 +1,16 @@
 import { useEffect } from 'react'
 import { useFavorite } from '../../stores/favorite'
 import Card from '../UI/Card'
+import { FavoritesService } from '../../service/FavoritesService'
 
 export const Favorites = () => {
 
     const favorites = useFavorite(state => state.favorites)
     const isLoading = useFavorite(state => state.loading)
-    const getFavorites = useFavorite(state => state.getFavorite)
+    const getFavorites = useFavorite(state => state.setFavorite)
 
     useEffect(() => {
-        getFavorites()
+        FavoritesService.getFavorites().then(data => getFavorites(data?.data))
     }, [])
 
     if (favorites.length === 0) {

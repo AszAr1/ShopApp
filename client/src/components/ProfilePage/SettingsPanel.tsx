@@ -9,18 +9,18 @@ interface SettingsPanel {
 
 const SettingsPanel:FC<SettingsPanel> = (props) => {
 
-  const logout = AuthService.logout;
   const removeUser = useAuthorization(state => state.logout)
   const push = useNavigate()
 
   const logOut = () => {
-    removeUser()
-    push('/')
-    logout().then(() => {
-      
-      
-    })
-    .catch((e) => console.log(e))
+      removeUser()
+      localStorage.removeItem('token')
+      localStorage.removeItem('refreshToken')
+      localStorage.removeItem('username')
+      console.log(localStorage.getItem('token'))
+      console.log(localStorage.getItem('refreshToken'))
+      console.log(localStorage.getItem('username'))
+      push('/')
   }
 
   return (

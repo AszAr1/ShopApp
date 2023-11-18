@@ -1,4 +1,4 @@
-import $api from "../API";
+import {$api} from "../API";
 
 export class SearcService {
     static async search (request: string){

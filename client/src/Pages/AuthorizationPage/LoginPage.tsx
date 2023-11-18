@@ -9,13 +9,24 @@ const LoginPage = () => {
   const navigate = useNavigate()
   const loginService = AuthService.login
 
-  const handleClickLogin = (name: string, email: string, password: string) => {
-    loginService(name, password)
-    .then((data)=> {
-      login(data.data.user, data.data.access)
+  const handleClickLogin = async (name: string, email: string, password: string) => {
+    // loginService(name, password)
+    // .then((data)=> {
+    //   login(data.data.user, data.data.access)
+    //   navigate('/')
+    // })
+    // .catch((e) => console.error(e))
+    const data = await loginService(name, password)
+
+    if(data){
+      localStorage.setItem('token', data.data.access)
+      localStorage.setItem('refreshToken', data.data.refresh)
+      localStorage.setItem('username', data.data.user.username)
+      login(data.data.user)
       navigate('/')
-    })
-    .catch((e) => console.error(e))
+      console.log(localStorage.getItem('token'))
+      console.log(localStorage.getItem('refreshToken'))
+    }
   }
 
   return (

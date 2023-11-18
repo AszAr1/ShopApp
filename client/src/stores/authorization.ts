@@ -3,7 +3,7 @@ import { useAuthorizationProps } from "../models/authProps"
 import { devtools, persist } from "zustand/middleware"
 import AuthService from "../service/AuthService"
 
-export const useAuthorization = create<useAuthorizationProps>()(devtools(persist((set => ({
+export const useAuthorization = create<useAuthorizationProps>()(devtools((set => ({
   user: {
     username: null,
     email: null
@@ -11,10 +11,9 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
   isRegister: false,
   login: false,
 
-  async loginUser(user, access) {
+
+  async loginUser(user) {
     try{
-      // const response = await AuthService.login(name, password)
-      localStorage.setItem('token', access)
       set({
         user: {
           username: user.username,
@@ -27,10 +26,8 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
     }
   },
 
-  async registration (name, email, access){
+  async registration (name, email){
     try{
-      // const response = await AuthService.register(name, email, password)
-      localStorage.setItem('token', access)
       set({
         user: {
           username: name,
@@ -45,7 +42,6 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
 
   async logout () {
     try{
-      // const response = await AuthService.logout()
       set({user: {
         username: null,
         email: null
@@ -58,4 +54,4 @@ export const useAuthorization = create<useAuthorizationProps>()(devtools(persist
   }
 
 
-})), { name: 'user', version: 1 })))
+}))))

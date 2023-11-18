@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Home from "./Pages/HomePage/Home";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -11,11 +11,39 @@ import FavoritesPage from './Pages/FavoritesPage/FavoritesPage';
 import ProfilePage from './Pages/ProfilePage/ProfilePage'
 import LoginPage from './Pages/AuthorizationPage/LoginPage';
 import RegistaerPage from './Pages/AuthorizationPage/RegistaerPage';
+import AuthService from './service/AuthService';
+import { useAuthorization } from './stores/authorization';
 
 
 function App() {
+  const loginUser = useAuthorization(state => state.loginUser)
+  const logOutUser = useAuthorization(state => state.logout)
+  const isLogged = useAuthorization(state => state.login)
+  // const [isLogged, setIsLogged] = useState(true)
+  const checkAuth = async () => {
+    const token = localStorage.getItem('token')
+    try {
+      if(token){
+        const data = await AuthService.getProfile(localStorage.getItem('username'))
+        console.log(data)
+        console.log(data.data)
+        if(data){
+          //@ts-ignore
+          loginUser(data.data.username)
+        } else {
+          logOutUser()
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
-  const [isLogged, setIsLogged] = useState(true)
+  useEffect(()=> {
+    console.log(localStorage.getItem('token'))
+    console.log(localStorage.getItem('refreshToken'))
+    checkAuth()
+  }, [])
 
   return (
     <>
