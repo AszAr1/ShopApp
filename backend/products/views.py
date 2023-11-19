@@ -4,7 +4,6 @@ from rest_framework.permissions import *
 from rest_framework.authentication import *
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken 
 
 from .models import Product, Favorite, CartItem, Order, OrderItem
 from .serializers import (ProductSerializer, 
@@ -93,6 +92,7 @@ class SneakersListAPIView(ListAPIView):
 class FavoritesAPIView(ListAPIView, DestroyAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
+    permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         print(request.user.id)
@@ -108,11 +108,7 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
     
     def delete(self, request, *args, **kwargs):
         obj_id = request.data.get('id')
-        obj = {}
-        if obj_id is None or obj_id == '':
-            obj = Favorite.objects.filter(user=self.request.user.id)[0]
-        else:
-            obj = Favorite.objects.get(id=obj_id)
+        obj = Favorite.objects.filter(user=self.request.user.id)[0] if obj_id is None or obj_id == '' else Favorite.objects.get(id=obj_id)
         self.perform_destroy(obj)
         data = request.data.copy()
         return Response(data=data, status=status.HTTP_204_NO_CONTENT)
