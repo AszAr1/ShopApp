@@ -1,16 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
 function CartPage() {
+    const [products, setProducts] = useState<[] | null>(null);
 
-    const [products, setProducts] = useState<[] | null>(null)
-
-  return (
-    <>
-        <div className='w-full h-screen'>
-
-        </div>
-    </>
-  )
+    return (
+        <>
+            <div className="h-screen w-full"></div>
+        </>
+    );
 }
 
-export default CartPage
+export default CartPage;

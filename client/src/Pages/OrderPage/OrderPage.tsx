@@ -1,16 +1,10 @@
-import { useAuthorization } from "../../stores/authorization"
-import NotLogin from "../AuthorizationPage/NotLogin"
+import { useUser } from "../../stores/user";
+import NotLogin from "../AuthorizationPage/NotLogin";
 
+function OrderPage() {
+    const isLoggin = useUser((state) => state.login);
 
-function OrderPage () {
-
-    const isLoggin = useAuthorization(state => state.login)
-
-    return isLoggin
-     ? 
-        <div>Hello</div>
-     :
-        <NotLogin/>
+    return isLoggin ? <div>Hello</div> : <NotLogin />;
 }
 
-export default OrderPage
+export default OrderPage;

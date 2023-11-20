@@ -1,6 +1,6 @@
-import { create } from "zustand"
+import { create } from "zustand";
 
-export const useOrder = create(set => ({
-  order: [],
-  loading: true,
-}))
+export const useOrder = create((set) => ({
+    order: [],
+    loading: true,
+}));

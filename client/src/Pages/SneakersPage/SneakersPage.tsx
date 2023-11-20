@@ -2,27 +2,25 @@ import React, { memo, useEffect, useState } from "react";
 import Card from "../../components/UI/Card";
 import { useSneakers } from "../../stores/sneakers";
 
-
 function SneakersPage() {
- 
-  const sneakers = useSneakers(state => state.sneakers)
-  const getSneakers = useSneakers(state => state.getSneakers)
+    const sneakers = useSneakers((state) => state.sneakers);
+    const getSneakers = useSneakers((state) => state.getSneakers);
 
+    useEffect(() => {
+        getSneakers();
+    }, []);
 
-  useEffect(() => {
-    getSneakers()
-
-  }, [])
-
-  return (
-    <>
-      <div className={`grid grid-cols-1 laptop:grid-cols-4 gap-8 laptop:gap-4 my-20 px-6 laptop:px-10`}>
-        {sneakers.map((sneaker) => (
-          <Card key={sneaker.id} product={sneaker} />
-        ))}
-      </div>
-    </>
-  )
+    return (
+        <>
+            <div
+                className={`laptop:grid-cols-4 laptop:gap-4 laptop:px-10 my-20 grid grid-cols-1 gap-8 px-6`}
+            >
+                {sneakers.map((sneaker) => (
+                    <Card key={sneaker.id} product={sneaker} />
+                ))}
+            </div>
+        </>
+    );
 }
 
-export default memo(SneakersPage)
+export default memo(SneakersPage);
