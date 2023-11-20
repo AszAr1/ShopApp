@@ -3,32 +3,26 @@ import Card from "../../components/UI/Card";
 import { useHoodies } from "../../stores/hoodies";
 
 function SneakersPage() {
+    const hoodies = useHoodies((state) => state.hoodies);
+    const getHoodies = useHoodies((state) => state.getHoodies);
 
-  const hoodies = useHoodies(state => state.hoodies)
-  const getHoodies = useHoodies(state => state.getHoodies)
+    useEffect(() => {
+        getHoodies();
+    }, []);
 
-  useEffect(() => {
-    getHoodies()
-  }, [])
-
-  return (
-    <>
-
-      <div className="w-full">
-
-        <div className={`grid grid-cols-1 desktop:grid-cols-4 gap-8 laptop:gap-4 my-20 px-6 laptop:px-10`}>
-
-          {hoodies.map((hoodie) => (
-            <Card key={hoodie.id} product={hoodie} />
-          ))}
-
-        </div>
-
-      </div>
-
-    </>
-
-  )
+    return (
+        <>
+            <div className="w-full">
+                <div
+                    className={`desktop:grid-cols-4 laptop:gap-4 laptop:px-10 my-20 grid grid-cols-1 gap-8 px-6`}
+                >
+                    {hoodies.map((hoodie) => (
+                        <Card key={hoodie.id} product={hoodie} />
+                    ))}
+                </div>
+            </div>
+        </>
+    );
 }
 
-export default memo(SneakersPage)
+export default memo(SneakersPage);

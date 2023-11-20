@@ -12,32 +12,30 @@ import ProfilePage from "./Pages/ProfilePage/ProfilePage";
 import LoginPage from "./Pages/AuthorizationPage/LoginPage";
 import RegistaerPage from "./Pages/AuthorizationPage/RegistaerPage";
 import AuthService from "./service/AuthService";
-import { useAuthorization } from "./stores/authorization";
+import { useUser } from "./stores/user";
+import { error } from "console";
 
 function App() {
-    const loginUser = useAuthorization((state) => state.loginUser);
-    const logOutUser = useAuthorization((state) => state.logout);
-    const isLogged = useAuthorization((state) => state.login);
+    const loginUser = useUser((state) => state.loginUser);
+    const logOutUser = useUser((state) => state.logout);
+    const isLogged = useUser((state) => state.login);
 
     const checkAuth = async () => {
         const token = localStorage.getItem("token");
-        try {
-            if (token) {
-                const data = await AuthService.getProfile(
-                    localStorage.getItem("username"),
-                );
-                console.log(data.data);
-                if (data) {
-                    //@ts-ignore
-                    loginUser(data.data);
+        if (token) {
+            await AuthService.getProfile(
+                localStorage.getItem("username"),
+            )
+            .then(response => {
+                if (response.status === 401) {
+                    logOutUser()
                 } else {
-                    logOutUser();
-                }
+                loginUser(response.data)
             }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+        })
+        .catch(error => { logOutUser(); console.log(error) })
+    }
+};
 
     useEffect(() => {
         console.log(localStorage.getItem("token"));

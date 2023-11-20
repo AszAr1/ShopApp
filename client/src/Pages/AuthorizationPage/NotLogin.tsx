@@ -1,10 +1,10 @@
 const NotLogin = () => {
-  return (
-    <div className="flex flex-col justify-center items-center w-full h-screen">
-        <h1 className="text-6xl">(◕‿◕)</h1>
-        <p className="font-mono text-3xl mt-3">You need log in</p>
-    </div> 
-  )
-}
+    return (
+        <div className="flex h-screen w-full flex-col items-center justify-center">
+            <h1 className="text-6xl">(◕‿◕)</h1>
+            <p className="mt-3 font-mono text-3xl">You need log in</p>
+        </div>
+    );
+};
 
-export default NotLogin
+export default NotLogin;

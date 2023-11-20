@@ -1,46 +1,28 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { BrandsProps } from "../../models/types";
 import axios from "axios";
 
-
-// const getBrands = async () => {
-//   try {
-//       const response = await axios.get<BrandsProps[]>(`http://localhost:8000/brands`);
-//       return response.data
-//   } catch (error) {
-//       console.error('Ошибка при получении данных с сервера:', error);
-//       return [];
-//   }
-// };
-
-
 function Brands() {
-
-  const [brands, setBrands] = useState<BrandsProps[]>([])
-
-  // useEffect(() => {
-  //   const fetchBrands = async () => {
-  //     const data = await getBrands()
-  //     setBrands(data)
-  //   }
-    
-  //   fetchBrands()
-
-  // }, [])
-  return (
-    <>
-      <div className={`flex justify-between items-center flex-col my-4 sm:my-0`}>
-        <h1 className={`my-2 font-bold text-xl`}>Наши бренды</h1>
-        <div className={`flex justify-center items-center flex-row`}>
-          {brands.map((brand) => (
-            <div key={brand.id} className={`mx-2 font-bold text-lg`}>
-              {brand.title}
+    const [brands, setBrands] = useState<BrandsProps[]>([]);
+    return (
+        <>
+            <div
+                className={`my-4 flex flex-col items-center justify-between sm:my-0`}
+            >
+                <h1 className={`my-2 text-xl font-bold`}>Наши бренды</h1>
+                <div className={`flex flex-row items-center justify-center`}>
+                    {brands.map((brand) => (
+                        <div
+                            key={brand.id}
+                            className={`mx-2 text-lg font-bold`}
+                        >
+                            {brand.title}
+                        </div>
+                    ))}
+                </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </>
-  )
+        </>
+    );
 }
 
-export default Brands
+export default Brands;

@@ -1,48 +1,47 @@
-import React from "react"
-import { ProductsProps } from "./products"
+import React from "react";
+import { ProductsProps } from "./products";
 
 export interface InputProps {
-  placeholder?: string,
-  className?: string,
-  children?: React.ReactNode,
-  InputClassName?: string,
-  ChildrenClassName?: string
+    placeholder?: string;
+    className?: string;
+    children?: React.ReactNode;
+    InputClassName?: string;
+    ChildrenClassName?: string;
 }
 
 export interface LinksProps {
-  id: number,
-  title: string,
-  link: string,
-  icon: React.ReactNode
+    id: number;
+    title: string;
+    link: string;
+    icon: React.ReactNode;
 }
 
 export interface LinksItemsProps {
-  className?: string,
-  classNameLi?: string
+    className?: string;
+    classNameLi?: string;
 }
 
 export interface ProfileProps {
-  open: boolean,
-  isOpen: () => void,
-  className: string
+    open: boolean;
+    isOpen: () => void;
+    className: string;
 }
 
 export interface ButtonProps {
-  children: React.ReactNode,
-  className: string,
+    children: React.ReactNode;
+    className: string;
 }
 
 export interface BrandsProps {
-  id: string,
-  title: string
+    id: string;
+    title: string;
 }
 
 export interface formProps {
-  title: string,
-  handleClick: (name: string, email: string, password: string) => void,
-  underText: string,
-  underText2: string,
-  link: string,
-  loginPage: boolean
+    title: string;
+    handleClick: (name: string, email: string, password: string) => void;
+    underText: string;
+    underText2: string;
+    link: string;
+    loginPage: boolean;
 }
-
