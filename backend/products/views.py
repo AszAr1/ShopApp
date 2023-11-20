@@ -158,6 +158,7 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
 class CartAPIView(ListCreateAPIView):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer 
+    permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         queryset = CartItem.objects.filter(user=request.user.id)
@@ -193,6 +194,7 @@ class CartAPIView(ListCreateAPIView):
 class OrderAPIView(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         queryset = Order.objects.filter(customer=request.user.id)
@@ -210,6 +212,7 @@ class OrderItemAPIView(RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     lookup_field = 'pk'
+    permission_classes = [IsAuthenticated]
 
     def retrieve(self, request, *args, **kwargs):
         queryset = OrderItem.objects.filter(order=kwargs['pk'])
