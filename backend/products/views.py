@@ -46,43 +46,19 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
 
     def list(self, request, *args, **kwargs):
         print(request.user.id)
-        products_ids = [favorite.product.id for favorite in Favorite.objects.filter(user=request.user.id)]    
-        queryset = [Product.objects.get(id=product_id) for product_id in products_ids]
-        serializer = ProductSerializer(queryset, many=True, context={'request': request})
-        return Response(data=serializer.data)
+        favorite_queryset = Favorite.objects.filter(user=request.user.id)
+        data = FavoriteSerializer(favorite_queryset, many=True).data
+        for datum in data:
+            product = ProductSerializer(Product.objects.get(id=datum['product']), context={'request': request}).data
+            datum.update({'product': product})
+        return Response(data=data)
     
     def delete(self, request, *args, **kwargs):
         obj_id = request.data.get('id')
         obj = Favorite.objects.filter(user=self.request.user.id)[0] if obj_id is None or obj_id == '' else Favorite.objects.get(id=obj_id)
-        self.perform_destroy(obj)
+        obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-class HoodiesListAPIView(ListAPIView):
-    queryset = Product.objects.filter(category='Hoodies')
-    serializer_class = ProductSerializer
-
-    def filter_queryset(self, request, queryset):
-        return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(request, self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-    
-
-class SneakersListAPIView(ListAPIView):
-    queryset = Product.objects.filter(category='Sneakers')
-    serializer_class = ProductSerializer
-
-    def filter_queryset(self, request, queryset):
-        return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(request, self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-    
 
 class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
     queryset = Product.objects.all()
@@ -167,4 +143,30 @@ class OrderItemAPIView(RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         queryset = OrderItem.objects.filter(order=kwargs['pk'])
         serializer = OrderItemSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class HoodiesListAPIView(ListAPIView):
+    queryset = Product.objects.filter(category='Hoodies')
+    serializer_class = ProductSerializer
+
+    def filter_queryset(self, request, queryset):
+        return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(request, self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+
+class SneakersListAPIView(ListAPIView):
+    queryset = Product.objects.filter(category='Sneakers')
+    serializer_class = ProductSerializer
+
+    def filter_queryset(self, request, queryset):
+        return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(request, self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
