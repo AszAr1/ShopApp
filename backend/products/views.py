@@ -96,15 +96,10 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
 
     def list(self, request, *args, **kwargs):
         print(request.user.id)
-        queryset = Favorite.objects.filter(user=request.user.id)
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        products_ids = [favorite.product.id for favorite in Favorite.objects.filter(user=request.user.id)]    
+        data = [Product.objects.get(id=product_id).__dict__ for product_id in products_ids]
+        [datum.pop('_state') for datum in data]
+        return Response(data=data)
     
     def delete(self, request, *args, **kwargs):
         obj_id = request.data.get('id')
