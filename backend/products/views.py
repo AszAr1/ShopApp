@@ -24,18 +24,8 @@ class MainAPIView(ListCreateAPIView):
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         queryset = queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
-
-        
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(queryset, many=True)
-        data = serializer.data.copy()
-        # data.insert(0, {})
-        # data.insert(0, self.request.user.is_authenticated)
-        return Response(data)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get('title')
@@ -49,6 +39,25 @@ class MainAPIView(ListCreateAPIView):
         serializer.save()
   
 
+class FavoritesAPIView(ListAPIView, DestroyAPIView):
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        print(request.user.id)
+        products_ids = [favorite.product.id for favorite in Favorite.objects.filter(user=request.user.id)]    
+        queryset = [Product.objects.get(id=product_id) for product_id in products_ids]
+        serializer = ProductSerializer(queryset, many=True, context={'request': request})
+        return Response(data=serializer.data)
+    
+    def delete(self, request, *args, **kwargs):
+        obj_id = request.data.get('id')
+        obj = Favorite.objects.filter(user=self.request.user.id)[0] if obj_id is None or obj_id == '' else Favorite.objects.get(id=obj_id)
+        self.perform_destroy(obj)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class HoodiesListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Hoodies')
     serializer_class = ProductSerializer
@@ -58,14 +67,7 @@ class HoodiesListAPIView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(request, self.get_queryset())
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(queryset, many=True)
-
         return Response(serializer.data)
     
 
@@ -78,36 +80,9 @@ class SneakersListAPIView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(request, self.get_queryset())
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(queryset, many=True)
-
         return Response(serializer.data)
     
-
-class FavoritesAPIView(ListAPIView, DestroyAPIView):
-    queryset = Favorite.objects.all()
-    serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticated]
-
-    def list(self, request, *args, **kwargs):
-        print(request.user.id)
-        products_ids = [favorite.product.id for favorite in Favorite.objects.filter(user=request.user.id)]    
-        data = [Product.objects.get(id=product_id).__dict__ for product_id in products_ids]
-        [datum.pop('_state') for datum in data]
-        return Response(data=data)
-    
-    def delete(self, request, *args, **kwargs):
-        obj_id = request.data.get('id')
-        obj = Favorite.objects.filter(user=self.request.user.id)[0] if obj_id is None or obj_id == '' else Favorite.objects.get(id=obj_id)
-        self.perform_destroy(obj)
-        data = request.data.copy()
-        return Response(data=data, status=status.HTTP_204_NO_CONTENT)
-
 
 class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
     queryset = Product.objects.all()
@@ -126,11 +101,6 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
         kwargs.setdefault('context', self.get_serializer_context()) 
         return serializer_class(*args, **kwargs)
     
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
-
     def post(self, request, *args, **kwargs):
         print(request.data)
         data = self.request.data.copy()
@@ -144,10 +114,8 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
     
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
-        data = dict()
-        data['smth'] = instance.id
         self.perform_destroy(instance)
-        return Response(data=data, status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CartAPIView(ListCreateAPIView):
@@ -157,13 +125,6 @@ class CartAPIView(ListCreateAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = CartItem.objects.filter(user=request.user.id)
-        # queryset = CartItem.objects.all()
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -183,7 +144,7 @@ class CartAPIView(ListCreateAPIView):
 
         CartItem.objects.all().delete()
 
-        return Response({}, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(status=status.HTTP_201_CREATED, headers=headers)
 
 
 class OrderAPIView(ListAPIView):
@@ -193,12 +154,6 @@ class OrderAPIView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = Order.objects.filter(customer=request.user.id)
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -211,10 +166,5 @@ class OrderItemAPIView(RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         queryset = OrderItem.objects.filter(order=kwargs['pk'])
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = OrderItemSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
         serializer = OrderItemSerializer(queryset, many=True)
         return Response(serializer.data)
