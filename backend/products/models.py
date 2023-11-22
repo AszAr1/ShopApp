@@ -88,10 +88,7 @@ class Order(RandomIDModel, models.Model):
     
     def get_price(self) -> int:
         queryset = OrderItem.objects.filter(order=self.id)
-        if len(queryset) > 0:
-            return eval('+'.join([str(order_item.item_total) for order_item in queryset]))
-        else:
-            return 0
+        return sum([order_item.item_total for order_item in queryset])
 
     def __str__(self) -> str:
         return f"{self.customer} - {self.pk}"

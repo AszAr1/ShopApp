@@ -1,3 +1,4 @@
+from requests import delete
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
@@ -22,10 +23,9 @@ class MainAPIView(ListCreateAPIView):
     ordering_fields = ['price']
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        queryset = queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        self.queryset = self.filter_queryset(self.queryset)
+        self.queryset = self.queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else self.queryset
+        return super().list(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get('title')
@@ -45,7 +45,6 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        print(request.user.id)
         favorite_queryset = Favorite.objects.filter(user=request.user.id)
         data = FavoriteSerializer(favorite_queryset, many=True).data
         for datum in data:
@@ -54,9 +53,10 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
         return Response(data=data)
     
     def delete(self, request, *args, **kwargs):
-        obj_id = request.data.get('id')
-        obj = Favorite.objects.filter(user=self.request.user.id)[0] if obj_id is None or obj_id == '' else Favorite.objects.get(id=obj_id)
-        obj.delete()
+        if request.data.get('id') is None or request.data.get('id') == '':
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        Favorite.objects.get(id=request.data.get('id')).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -67,7 +67,7 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
 
     def get_serializer(self, *args, **kwargs):
         if self.request.method == "POST":
-            if 'quantity' in self.request.data.keys():
+            if 'quantity' in self.request.data.copy():
                 serializer_class = CartItemSerializer
             else: 
                 serializer_class = FavoriteSerializer
@@ -78,13 +78,11 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
         return serializer_class(*args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        print(request.data)
         data = self.request.data.copy()
         data['user'] = request.user.id
-        print(data['user'])
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        serializer.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
@@ -100,14 +98,16 @@ class CartAPIView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        queryset = CartItem.objects.filter(user=request.user.id)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        data = CartItemSerializer(CartItem.objects.filter(user=request.user.id), many=True).data
+        for datum in data:
+            product = ProductSerializer(Product.objects.get(id=datum['product']), context={'request': request}).data
+            datum.update({'product': product})
+        return Response(data=data)
     
     def post(self, request, *args, **kwargs):
         order_serializer = OrderSerializer(data={'customer': request.user.id})
         order_serializer.is_valid(raise_exception=True)
-        self.perform_create(order_serializer)
+        order_serializer.save()
         headers = self.get_success_headers(order_serializer.validated_data)
         cart_items = CartItem.objects.filter(user=request.user.id)
         order_id = Order.objects.last().id
@@ -118,7 +118,7 @@ class CartAPIView(ListCreateAPIView):
             order_item_serializer.is_valid(raise_exception=True)
             self.perform_create(order_item_serializer)
 
-        CartItem.objects.all().delete()
+        cart_items.delete()
 
         return Response(status=status.HTTP_201_CREATED, headers=headers)
 
