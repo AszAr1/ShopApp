@@ -1,4 +1,5 @@
 import axios from "axios";
+import {$api} from "../API";
 
 export class SneakersService {
     static async getSneakers() {
@@ -14,4 +15,5 @@ export class SneakersService {
             `http://localhost:8000/products/sneakers/?filter=${limit}`,
         );
     }
+
 }

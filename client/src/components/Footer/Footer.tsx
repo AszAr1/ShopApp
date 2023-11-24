@@ -7,8 +7,8 @@ import Brands from "./Brands";
 function Footer () {
     return (
         <>
-            <div className={`w-full flex justify-between items-center flex-col laptop:flex-row laptop:px-24 px-6 py-8
-                text-white bg-black mb-auto
+            <div className={`w-full h-full flex justify-between items-center flex-col laptop:flex-row laptop:px-24 px-6 py-8
+                text-white bg-black mt-auto
             `}>
                 <div className={`flex justify-center items-center flex-col`}>
                     <h1 className={`text-2xl font-bold font-sans`}>SneakerShop</h1>

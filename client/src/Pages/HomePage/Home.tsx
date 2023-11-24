@@ -1,11 +1,10 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect } from "react";
 import Intro from "./Intro";
 import Card from "../../components/UI/Card";
 import Button from "../../components/UI/Button";
 import { Link } from "react-router-dom";
 import { useSneakers } from "../../stores/sneakers";
 import { useHoodies } from "../../stores/hoodies";
-import { SneakersService } from "../../service/SneakersService";
 
 function Home() {
 

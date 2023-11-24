@@ -1,9 +1,9 @@
 import { memo, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import SneakerSize from "./ProductsSize";
-import Button from "../../components/UI/Button";
 import Description from "./Description";
 import { useSneakers } from "../../stores/sneakers";
+import {CartService} from "../../service/CartService";
 
 function ProductPage() {
     const { id } = useParams();
@@ -17,6 +17,11 @@ function ProductPage() {
     if (!sneaker) {
         return <div>Loading...</div>;
     }
+
+    function addCart(){
+        CartService.addToCart(id)
+    }
+
     return (
         <>
             <div
@@ -70,13 +75,14 @@ function ProductPage() {
                             </h1>
                         </div>
 
-                        <Button
+                        <button
                             className={`mt-4 w-full rounded-lg
                          border-2 border-black bg-black p-2 font-bold text-white
                          transition duration-500 hover:bg-white hover:text-black`}
+                            onClick={addCart}
                         >
                             В корзину
-                        </Button>
+                        </button>
                     </div>
                 </div>
             </div>

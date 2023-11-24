@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 import { AiOutlineStar } from "react-icons/ai";
@@ -18,7 +18,7 @@ function Card({ product }) {
         // } else {
         console.log(productId);
         FavoritesService.addFavorites(productId)
-            .then((data) => setFavorites(data.data))
+            .then((data) => setFavorites())
             .catch((e) => console.error(e));
         // }
     }
@@ -67,4 +67,4 @@ function Card({ product }) {
     );
 }
 
-export default memo(Card);
+export default Card;
