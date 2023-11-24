@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useUser } from "../../stores/user";
 import { useNavigate } from "react-router-dom";
-import AuthService from "../../service/AuthService";
+import { useFavorite } from "../../stores/favorite";
 
 interface SettingsPanel {
     activeComponentRender: (component: string) => void;
@@ -10,15 +10,14 @@ interface SettingsPanel {
 const SettingsPanel: FC<SettingsPanel> = (props) => {
     const removeUser = useUser((state) => state.logout);
     const push = useNavigate();
+    const {clearFavorites} = useFavorite()
 
     const logOut = () => {
         removeUser();
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("username");
-        console.log(localStorage.getItem("token"));
-        console.log(localStorage.getItem("refreshToken"));
-        console.log(localStorage.getItem("username"));
+        clearFavorites()    
         push("/");
     };
 

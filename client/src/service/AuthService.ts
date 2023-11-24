@@ -45,10 +45,10 @@ export default class AuthService {
         return $api.post("/logout/", localStorage.getItem("refreshToken"));
     }
 
-    static async getProfile(
+    static getProfile(
         username: string | null,
-    ): Promise<AxiosResponse<User>> {
-        const response = await $api.get<User>(`/profile/${username}`);
+    ) {
+        const response = $api.get<User>(`/profile/${username}`);
         return response;
     }
 }

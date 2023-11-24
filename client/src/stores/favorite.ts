@@ -1,29 +1,25 @@
-import axios from "axios";
 import { create } from "zustand";
 import { useFavoriteProps } from "../models/useFavoriteProps";
 import { immer } from "zustand/middleware/immer";
 import { devtools, persist } from "zustand/middleware";
+import {FavoritesService} from "../service/FavoritesService";
 
 export const useFavorite = create<useFavoriteProps>()(
-    persist(
         devtools(
             immer((set) => ({
                 favorites: [],
                 loading: true,
 
-                setFavorite: (data) => {
+                async setFavorite ()  {
                     try {
-                        if (data) {
-                            set({ favorites: data, loading: false });
-                        }
-                    } catch (error) {
-                        console.error(
-                            "Ошибка при получении данных с сервера:",
-                            error,
-                        );
+                        const response = await FavoritesService.getFavorites();
+                        set({favorites: response.data, loading: false});
+                    } catch (err) {
+                        console.error(err);
                     }
                 },
 
+                clearFavorites: () => { set({ favorites: [] })},
 
                 async deleteFavorite(productId) {
                     try {
@@ -36,10 +32,6 @@ export const useFavorite = create<useFavoriteProps>()(
                         console.error(error);
                     }
                 },
-
-                //удалять из избранного по idПродуктов
             })),
         ),
-        { name: "v1", version: 1 },
-    ),
 );
