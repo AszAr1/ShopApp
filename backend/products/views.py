@@ -1,4 +1,3 @@
-from requests import delete
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
