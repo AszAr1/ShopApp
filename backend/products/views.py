@@ -14,13 +14,14 @@ from .serializers import (ProductSerializer,
                           OrderSerializer)
 
 
-class MainAPIView(ListCreateAPIView):
+class MainAPIView(ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_fields = ['category'] 
     search_fields = ['category', 'title', 'description']
     ordering_fields = ['price']
+    permission_classes = [AllowAny]
 
     def list(self, request, *args, **kwargs):
         self.queryset = self.filter_queryset(self.queryset)
@@ -64,6 +65,7 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_serializer(self, *args, **kwargs):
         if self.request.method == "POST":
