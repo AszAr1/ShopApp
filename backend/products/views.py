@@ -106,6 +106,9 @@ class CartAPIView(ListCreateAPIView):
         return Response(data=data)
     
     def post(self, request, *args, **kwargs):
+        if len(CartItem.objects.filter(user=request.user.id)) == 0:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
         order_serializer = OrderSerializer(data={'customer': request.user.id})
         order_serializer.is_valid(raise_exception=True)
         order_serializer.save()
