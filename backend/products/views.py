@@ -85,7 +85,7 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(status=status.HTTP_201_CREATED, headers=headers)
     
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -117,34 +117,26 @@ class CartAPIView(ListCreateAPIView):
             item_data = {"product": item.product.id, 'quantity': item.quantity, 'order': order_id}
             order_item_serializer = OrderItemSerializer(data=item_data)
             order_item_serializer.is_valid(raise_exception=True)
-            self.perform_create(order_item_serializer)
+            order_item_serializer.save()
 
         cart_items.delete()
 
         return Response(status=status.HTTP_201_CREATED, headers=headers)
 
 
-class OrderAPIView(ListAPIView):
+class OrdersAPIView(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        queryset = Order.objects.filter(customer=request.user.id)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class OrderItemAPIView(RetrieveAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-    lookup_field = 'pk'
-    permission_classes = [IsAuthenticated]
-
-    def retrieve(self, request, *args, **kwargs):
-        queryset = OrderItem.objects.filter(order=kwargs['pk'])
-        serializer = OrderItemSerializer(queryset, many=True)
-        return Response(serializer.data)
+        orders = OrderSerializer(self.queryset.filter(customer=request.user.id), many=True).data
+        
+        for order in orders:
+            products = [item.product for item in OrderItem.objects.filter(order=order['id'])]
+            order['products'] = ProductSerializer(products, many=True, context={'request': request}).data
+            
+        return Response(orders)
 
 
 class HoodiesListAPIView(ListAPIView):
@@ -156,8 +148,7 @@ class HoodiesListAPIView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(request, self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(self.get_serializer(queryset, many=True).data)
     
 
 class SneakersListAPIView(ListAPIView):
@@ -169,5 +160,4 @@ class SneakersListAPIView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(request, self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(self.get_serializer(queryset, many=True).data)

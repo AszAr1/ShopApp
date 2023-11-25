@@ -39,11 +39,10 @@ class OrderItemSerializer(ModelSerializer, GetID):
 class OrderSerializer(ModelSerializer, GetID):
     price = SerializerMethodField(read_only=True)
     id = SerializerMethodField(read_only=True)
-    see_more = HyperlinkedIdentityField(view_name='order-items', lookup_field='pk')
     
     class Meta:
         model = Order
-        fields = ['id', 'customer', 'order_date', 'status', 'price', "see_more"] 
+        fields = ['id', 'customer', 'order_date', 'status', 'price'] 
                    
     def get_price(self, obj):
         if not hasattr(obj, 'id'):

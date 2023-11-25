@@ -6,8 +6,7 @@ from .views import (MainAPIView,
                     ProductDetailAPIView, 
                     FavoritesAPIView, 
                     CartAPIView, 
-                    OrderAPIView, 
-                    OrderItemAPIView, 
+                    OrdersAPIView, 
                     HoodiesListAPIView, 
                     SneakersListAPIView,)
 
@@ -19,6 +18,5 @@ urlpatterns = [
     path('products/<int:pk>/', ProductDetailAPIView.as_view(), name='product-detail'),
     path('favorites/', FavoritesAPIView.as_view(), name='favorites'),
     path('cart/', CartAPIView.as_view(), name='cart'),
-    path('order/<int:pk>/', OrderItemAPIView.as_view(), name='order-items'),
-    path('orders/', OrderAPIView.as_view(), name='orders'),
+    path('orders/', OrdersAPIView.as_view(), name='orders'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

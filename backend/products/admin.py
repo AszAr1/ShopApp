@@ -4,23 +4,23 @@ from .models import Order, OrderItem, Product, Favorite, CartItem
 
 
 class ProductAdmin(admin.ModelAdmin):
-    fields = ('title', 'description', 'content', 'category', "image", 'price')
+    fields = ('title', 'description', 'content', 'category', "image", 'price',)
 
 
 class OrderAdmin(admin.ModelAdmin):
-    fields = ('customer', 'order_date')
+    fields = ('customer',)
 
 
 class OrderItemAdmin(admin.ModelAdmin):
-    fields = ('order', 'product', 'quantity')
+    fields = ('order', 'product', 'quantity',)
 
 
 class FavoriteAdmin(admin.ModelAdmin):
-    fields = ('user', 'product')
+    fields = ('user', 'product',)
 
 
 class CartItemAdmin(admin.ModelAdmin):
-    fields = ('user', 'product', "quantity")
+    fields = ('user', 'product', "quantity",)
 
 
 admin.site.register(Product, ProductAdmin)
