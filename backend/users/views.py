@@ -33,6 +33,8 @@ class CustomUserRegistrationAPIView(CreateAPIView):
 
 class CustomUserAuthorizationAPIView(TokenObtainPairView):
     def post(self, request, *args, **kwargs) -> Response:
+        if not 'username' in request.data.keys():
+            return Response(status=status.HTTP_404_NOT_FOUND) 
         user = CustomUser.objects.get(username=request.data['username'])
         try:
             profile_picture = user.profile_picture.url
