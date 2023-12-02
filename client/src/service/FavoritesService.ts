@@ -1,5 +1,5 @@
 import { $api } from "../API";
-import { ProductsProps } from "../models/products";
+import { ProductsProps } from "../models/productsProps";
 
 export class FavoritesService {
     static async addFavorites(productId: string) {

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 import { AiOutlineStar } from "react-icons/ai";
 import { useFavorite } from "../../stores/favorite";
 import { FavoritesService } from "../../service/FavoritesService";
+import { Notification } from "../Notification/Notification";
 
 //@ts-ignore
 function Card({ product }) {
@@ -11,6 +12,8 @@ function Card({ product }) {
     // const isFavorite = favorites.some((item) => item.id === product.id);
     const removeFavorite = useFavorite((state) => state.deleteFavorite);
     const setFavorites = useFavorite((state) => state.setFavorite);
+    const [showToast, setShowToast] = useState(false);
+    const [done, setDone] = useState(false);
 
     function toggleFavorite(productId: string) {
         // if (isFavorite) {
@@ -18,13 +21,21 @@ function Card({ product }) {
         // } else {
         console.log(productId);
         FavoritesService.addFavorites(productId)
-            .then((data) => setFavorites())
-            .catch((e) => console.error(e));
+            .then((data) => {setFavorites(); setShowToast(true); setDone(true)})
+            .catch((e) => {console.error(e); setDone(false); setShowToast(true); });
         // }
     }
 
     return (
         <>
+            {showToast && (
+                <Notification 
+                negativeDescription="Failed to add favorite."
+                positiveDescription="successfully ˆ_ˆ" 
+                setShowToast={setShowToast}
+                done={done}
+                />
+            )}
             <div className="flex flex-col items-start justify-center rounded-lg border-2 border-gray-400 px-3 py-2 shadow-2xl ">
                 <div className="flex max-h-[300px] max-w-[800px] items-center justify-center overflow-hidden rounded-lg">
                     <img src={product.image} alt="image"></img>

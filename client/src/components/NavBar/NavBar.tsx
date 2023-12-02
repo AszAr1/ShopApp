@@ -30,7 +30,7 @@ function NavBar() {
                     Sneakers
                 </a>
 
-                <Search />
+                <Search isModalSearch={false} />
 
                 <a
                     href={`/`}
@@ -109,7 +109,7 @@ function NavBar() {
                 Sneakers
             </a>
 
-            <Search />
+            <Search isModalSearch={false} />
 
             <a
                 href={`/`}
@@ -147,29 +147,25 @@ function NavBar() {
                 <div>
                     <div
                         className={`h-0.5 w-6 bg-black
-          transition-all duration-300 ease-in-out ${
-              open ? "translate-y-1 rotate-45" : "-translate-y-0.5"
-          }`}
+          transition-all duration-300 ease-in-out ${open ? "translate-y-1 rotate-45" : "-translate-y-0.5"
+                            }`}
                     ></div>
                     <div
-                        className={`${
-                            open ? "opacity-0" : "opacity-100"
-                        } my-0.5 h-0.5 w-6 bg-black transition duration-100`}
+                        className={`${open ? "opacity-0" : "opacity-100"
+                            } my-0.5 h-0.5 w-6 bg-black transition duration-100`}
                     ></div>
                     <div
                         className={`h-0.5 w-6 bg-black
-          transition-all duration-300 ease-in-out ${
-              open ? "-translate-y-1 -rotate-45" : "translate-y-0.5"
-          }
+          transition-all duration-300 ease-in-out ${open ? "-translate-y-1 -rotate-45" : "translate-y-0.5"
+                            }
           `}
                     ></div>
                 </div>
             </div>
 
             <div
-                className={`${
-                    open ? "block" : "hidden"
-                } laptop:hidden absolute right-4 top-20 flex flex-col items-center justify-center rounded-xl bg-black p-6 text-white`}
+                className={`${open ? "block" : "hidden"
+                    } laptop:hidden absolute right-4 top-20 flex flex-col items-center justify-center rounded-xl bg-black p-6 text-white`}
             >
                 <button>
                     <Link

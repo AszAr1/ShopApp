@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import { AuthResponse, UserProps } from "../models/authResponse";
+import { AxiosResponse } from "axios";
+import { AuthResponse } from "../models/authResponseProps";
 import { $api } from "../API";
 import { User } from "../models/authProps";
 
@@ -13,8 +13,9 @@ export default class AuthService {
             password: password,
         };
         const response = await $api.post<AuthResponse>("/login/", user);
-        localStorage.setItem("token", response.data.access);
-        localStorage.setItem("refreshToken", response.data.refresh);
+        localStorage.setItem("token", response.data.access)
+        localStorage.setItem("refreshToken", response.data.refresh)
+        localStorage.setItem("username", response.data.user.username)
         return response;
     }
 
@@ -42,6 +43,7 @@ export default class AuthService {
 
     static async logout(): Promise<void> {
         console.log(localStorage.getItem("refreshToken"));
+        localStorage.removeItem('username')
         return $api.post("/logout/", localStorage.getItem("refreshToken"));
     }
 

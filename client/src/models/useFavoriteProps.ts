@@ -1,5 +1,5 @@
 import React from "react";
-import { ProductsProps } from "./products";
+import { ProductsProps } from "./productsProps";
 
 export interface useFavoriteProps {
     favorites: ProductsProps[];

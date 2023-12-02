@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Home from "./Pages/HomePage/Home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 import SneakersPage from "./Pages/SneakersPage/SneakersPage";
 import HoodiesPage from "./Pages/HoodiesPage/HoodiesPage";
@@ -13,35 +13,48 @@ import LoginPage from "./Pages/AuthorizationPage/LoginPage";
 import RegistaerPage from "./Pages/AuthorizationPage/RegistaerPage";
 import AuthService from "./service/AuthService";
 import { useUser } from "./stores/user";
-import { error } from "console";
+import CartPage from "./Pages/CartPage/CartPage";
+import { Successfully } from "./Pages/Successfully/Successfully";
+import { useOrder } from "./stores/order";
+import { useFavorite } from "./stores/favorite";
+
 
 function App() {
     const loginUser = useUser((state) => state.loginUser);
     const logOutUser = useUser((state) => state.logout);
     const isLogged = useUser((state) => state.login);
+    const getOrders = useOrder(state => state.setOrder)
 
     const checkAuth = async () => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
         if (token) {
             await AuthService.getProfile(
                 localStorage.getItem("username"),
             )
-            .then(response => {
-                if (response.status === 401) {
-                    logOutUser()
-                } else {
-                loginUser(response.data)
-            }
-        })
-        .catch(error => { logOutUser(); console.log(error) })
-    }
-};
+                .then(response => {
+                    if (response.status === 401) {
+                        logOutUser()
+                    } else {
+                        loginUser(response.data)
+                        getOrders()
+                    }
+                })
+                .catch(error => { logOutUser(); console.log(error) })
+        }
+    };
 
     useEffect(() => {
-        console.log(localStorage.getItem("token"));
-        console.log(localStorage.getItem("refreshToken"));
         checkAuth();
     }, []);
+
+    const ProtectedRoute = ({ redirectPath = '/' }) => {
+        if (!isLogged) {
+            return <Navigate to={redirectPath} replace />;
+        }
+
+        return <Outlet />;
+    };
+
 
     return (
         <>
@@ -59,17 +72,20 @@ function App() {
                     element={<HoodieProductPage />}
                 />
                 <Route path="/hoodie/" element={<HoodiesPage />} />
-                //FavoritesPage
-                <Route path="/favorites/" element={<FavoritesPage />} />
-                //ProfilePage
-                <Route path="/profile" element={<ProfilePage />} />
-                //RegisterPage
-                <Route path="/register" element={<RegistaerPage />} />
+                <Route element={<ProtectedRoute />}>
+                    //FavoritesPage
+                    <Route path="/favorites/" element={<FavoritesPage />} />
+                    //ProfilePage
+                    <Route path="/profile" element={<ProfilePage />} />
+                    //CartPage
+                    <Route path='/cart' element={<CartPage />} />
+                    <Route path="/successfully" element={<Successfully />} />
+                </Route>
                 //LoginPage
                 {/*@ts-ignore */}
                 <Route path="/login" element={<LoginPage />} />
-                //CartPage
-                {/* <Route path='/cart' element={<CartPage />} /> */}
+                //RegisterPage
+                <Route path="/register" element={<RegistaerPage />} />
             </Routes>
         </>
     );

@@ -1,19 +1,20 @@
 import axios from "axios";
 
 export const API_URL = `http://localhost:8000`;
+const token = localStorage.getItem('token')
 
 export const $api = axios.create({
     baseURL: API_URL,
     headers: {
         Authorization:
-            `Bearer ${localStorage.getItem("token")}` === `Bearer ` + null ||
-            `Bearer ${localStorage.getItem("token")}` === `Bearer ` + undefined
+            `Bearer ${token}` === `Bearer ` + null ||
+            `Bearer ${token}` === `Bearer ` + undefined
                 ? ""
-                : `Bearer ${localStorage.getItem("token")}`,
+                : `Bearer ${token}`,
     },
 });
 
-// export function getTokenFromLocalStoage() {
+// export function getToken() {
 //     const token = localStorage.getItem('token')
 //     return token
 // }

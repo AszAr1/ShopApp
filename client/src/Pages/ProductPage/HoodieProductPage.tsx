@@ -13,7 +13,7 @@ function ProductPage() {
 
     useEffect(() => {
         getProduct(productId);
-    }, []);
+    }, [productId]);
 
     if (!product) {
         return <div>Loading...</div>;

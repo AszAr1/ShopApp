@@ -2,14 +2,6 @@ import React from "react";
 
 export interface ProductsProps {
     id: string;
-    // image: string,
-    // title: string,
-    // category: string,
-    // price: number,
-    // discountPrise: number,
-    // description: string,
-    // about: string,
-    // sizes: []
     title: string;
     description: string;
     content: string;

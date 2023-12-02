@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { useSneakersProps } from "../models/products";
+import { useSneakersProps } from "../models/productsProps";
 import { SneakersService } from "../service/SneakersService";
 
 export const useSneakers = create<useSneakersProps>((set) => ({
