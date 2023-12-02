@@ -91,7 +91,7 @@ class Order(RandomIDModel, models.Model):
         return sum([order_item.item_total for order_item in queryset])
 
     def __str__(self) -> str:
-        return f"{self.customer} - {self.pk}"
+        return f"{self.user} - {self.pk}"
         
 
 class OrderItem(RandomIDModel, models.Model):

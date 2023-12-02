@@ -42,7 +42,7 @@ class OrderSerializer(ModelSerializer, GetID):
     
     class Meta:
         model = Order
-        fields = ['id', 'customer', 'order_date', 'status', 'price'] 
+        fields = ['id', 'user', 'order_date', 'status', 'price'] 
                    
     def get_price(self, obj):
         if not hasattr(obj, 'id'):
