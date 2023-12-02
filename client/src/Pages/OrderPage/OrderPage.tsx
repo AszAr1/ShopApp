@@ -47,6 +47,7 @@ function OrderPage() {
                         <h1 className="font-bold text-xl">Total price: </h1>
                         <p className="text-lg mx-2">{findTotalPrice()}</p>
                     </div>
+                    <h2></h2>
                     <button onClick={handleClickPay} className="bg-black w-full px-5 py-2 text-white transition-all duration-200 hover:scale-90">Pay</button>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Home from "./Pages/HomePage/Home";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 
@@ -16,7 +16,7 @@ import { useUser } from "./stores/user";
 import CartPage from "./Pages/CartPage/CartPage";
 import { Successfully } from "./Pages/Successfully/Successfully";
 import { useOrder } from "./stores/order";
-import { useFavorite } from "./stores/favorite";
+import { ProtectedRoute } from "./guards/CheckAuthRoute";
 
 
 function App() {
@@ -47,13 +47,7 @@ function App() {
         checkAuth();
     }, []);
 
-    const ProtectedRoute = ({ redirectPath = '/' }) => {
-        if (!isLogged) {
-            return <Navigate to={redirectPath} replace />;
-        }
-
-        return <Outlet />;
-    };
+    
 
 
     return (
@@ -72,7 +66,7 @@ function App() {
                     element={<HoodieProductPage />}
                 />
                 <Route path="/hoodie/" element={<HoodiesPage />} />
-                <Route element={<ProtectedRoute />}>
+                <Route element={< ProtectedRoute/>}>
                     //FavoritesPage
                     <Route path="/favorites/" element={<FavoritesPage />} />
                     //ProfilePage
@@ -82,7 +76,6 @@ function App() {
                     <Route path="/successfully" element={<Successfully />} />
                 </Route>
                 //LoginPage
-                {/*@ts-ignore */}
                 <Route path="/login" element={<LoginPage />} />
                 //RegisterPage
                 <Route path="/register" element={<RegistaerPage />} />
