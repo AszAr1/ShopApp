@@ -6,11 +6,13 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Product, Favorite, CartItem, Order, OrderItem
-from .serializers import (ProductSerializer, 
-                          CartItemSerializer, 
-                          FavoriteSerializer, 
-                          OrderItemSerializer, 
-                          OrderSerializer)
+from .serializers import (
+    ProductSerializer, 
+    CartItemSerializer, 
+    FavoriteSerializer, 
+    OrderItemSerializer, 
+    OrderSerializer,
+)
 
 
 class MainAPIView(ListAPIView):
@@ -50,7 +52,7 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
         for datum in data:
             product = ProductSerializer(Product.objects.get(id=datum['product']), context={'request': request}).data
             datum.update({'product': product})
-        return Response(data=data)
+        return Response(data=data, status=status.HTTP_200_OK)
     
     def delete(self, request, *args, **kwargs):
         if request.data.get('id') is None or request.data.get('id') == '':
@@ -68,7 +70,7 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
 
     def get_serializer(self, *args, **kwargs):
         if self.request.method == "POST":
-            if 'quantity' in self.request.data.copy():
+            if 'quantity' in self.request.data.keys():
                 serializer_class = CartItemSerializer
             else: 
                 serializer_class = FavoriteSerializer
@@ -81,7 +83,11 @@ class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
     def post(self, request, *args, **kwargs):
         data = self.request.data.copy()
         data['user'] = request.user.id
+            
         serializer = self.get_serializer(data=data)
+        if serializer.__class__.__name__ is FavoriteSerializer.__name__ and Favorite.objects.filter(user=data['user'], product=data['product']).exists():
+            return Response(data={"message": "This product is already in Favorites"}, status=status.HTTP_400_BAD_REQUEST)
+
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
@@ -103,18 +109,19 @@ class CartAPIView(ListCreateAPIView):
         for datum in data:
             product = ProductSerializer(Product.objects.get(id=datum['product']), context={'request': request}).data
             datum.update({'product': product})
-        return Response(data=data)
+        return Response(data=data, status=status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):
         if len(CartItem.objects.filter(user=request.user.id)) == 0:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": "No products in cart"}, status=status.HTTP_400_BAD_REQUEST)
         
-        order_serializer = OrderSerializer(data={'customer': request.user.id})
+        order_serializer = OrderSerializer(data={'user': request.user.id})
         order_serializer.is_valid(raise_exception=True)
         order_serializer.save()
         headers = self.get_success_headers(order_serializer.validated_data)
         cart_items = CartItem.objects.filter(user=request.user.id)
-        order_id = Order.objects.last().id
+        order_id = Order.objects.filter(user=request.user.id).last().id
+        print(order_serializer['id'])
 
         for item in cart_items:
             item_data = {"product": item.product.id, 'quantity': item.quantity, 'order': order_id}
@@ -133,34 +140,36 @@ class OrdersAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        orders = OrderSerializer(self.queryset.filter(customer=request.user.id), many=True).data
+        orders = OrderSerializer(self.queryset.filter(user=request.user.id), many=True).data
         
         for order in orders:
             products = [item.product for item in OrderItem.objects.filter(order=order['id'])]
             order['products'] = ProductSerializer(products, many=True, context={'request': request}).data
             
-        return Response(orders)
+        return Response(orders, status=status.HTTP_200_OK)
 
 
 class HoodiesListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Hoodies')
     serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def filter_queryset(self, request, queryset):
         return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(request, self.get_queryset())
-        return Response(self.get_serializer(queryset, many=True).data)
+        self.queryset = self.filter_queryset(request, self.get_queryset())
+        return Response(self.get_serializer(self.queryset, many=True).data, status=status.HTTP_200_OK)
     
 
 class SneakersListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Sneakers')
     serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def filter_queryset(self, request, queryset):
         return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(request, self.get_queryset())
-        return Response(self.get_serializer(queryset, many=True).data)
+        self.queryset = self.filter_queryset(request, self.get_queryset())
+        return Response(self.get_serializer(self.queryset, many=True).data, status=status.HTTP_200_OK)

@@ -78,7 +78,7 @@ class Order(RandomIDModel, models.Model):
         DISPUTED: 'Disputed',
     }
 
-    customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=30, default=STATUS_CHOICES[PENDING], null=True)
 
