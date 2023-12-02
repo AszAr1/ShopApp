@@ -14,9 +14,6 @@ const SettingsPanel: FC<SettingsPanel> = (props) => {
 
     const logOut = () => {
         removeUser();
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("username");
         clearFavorites()    
         push("/");
     };

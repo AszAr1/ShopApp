@@ -41,8 +41,9 @@ export const useUser = create<useAuthorizationProps>()(
 
         async logout() {
             try {
-                localStorage.removeItem('token')
-                localStorage.removeItem('refreshToken')
+                localStorage.removeItem("token")
+                localStorage.removeItem("refreshToken")
+                localStorage.removeItem("username")
                 set({
                     user: {
                         username: null,

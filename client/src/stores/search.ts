@@ -5,13 +5,18 @@ import { SearcService } from "../service/SearchService";
 
 export const useSearch = create<useSearchProps>((set) => ({
     products: [],
+    request: "",
 
-    async searchProduct(productName) {
+    setRequest (input) {
+        set({request: input})
+    },
+
+    async searchProduct(request) {
         try {
-            const response = await SearcService.search(productName);
-            console.log(response.data);
+            const response = await SearcService.search(request);
+            // console.log(response.data);
             set({
-                products: [await response.data],
+                products: [response.data],
             });
         } catch (error) {
             console.error();

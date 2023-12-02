@@ -1,29 +1,47 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SneakerSize from "./ProductsSize";
 import Description from "./Description";
 import { useSneakers } from "../../stores/sneakers";
-import {CartService} from "../../service/CartService";
+import { CartService } from "../../service/CartService";
+import { Notification } from "../../components/Notification/Notification";
 
 function ProductPage() {
     const { id } = useParams();
     const getProduct = useSneakers((state) => state.getOneSneaker);
     const sneaker = useSneakers((state) => state.sneaker);
+    const [showToast, setShowToast] = useState(false);
+    const [done, setDone] = useState(false);
 
     useEffect(() => {
         getProduct(id);
-    }, []);
+    }, [id]);
 
     if (!sneaker) {
         return <div>Loading...</div>;
     }
 
-    function addCart(){
-        CartService.addToCart(id)
+    function addCart() {
+        try {
+            CartService.addToCart(id)
+            setDone(true)
+            setShowToast(true)
+        } catch (error) {
+            console.log(error)
+            setShowToast(true)
+        }
     }
 
     return (
         <>
+            {showToast && (
+                <Notification
+                    done={done}
+                    positiveDescription="Successfully ˆ_ˆ"
+                    negativeDescription="Failed add to cart. x_x"
+                    setShowToast={setShowToast}
+                />
+            )}
             <div
                 className={`desktop:px-24 flex w-full flex-col items-center justify-between px-6`}
             >

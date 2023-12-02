@@ -21,16 +21,16 @@ function ProfilePage() {
             <div className={"flex h-screen w-full items-start justify-center"}>
                 <SettingsPanel activeComponentRender={activeComponentRender} />
 
-                {!activeComponent && (
+                {/* {!activeComponent && (
                     <div className="flex h-full w-full items-center justify-center font-mono text-7xl">
                         (◕‿◕)
                     </div>
                 )}
-                {activeComponent === "profile" && <Profile />}
-                {activeComponent === "security" && <SecurityPanel />}
+                <Profile />
+                {/* {activeComponent === "security" && <SecurityPanel />}
                 {activeComponent === "order" && <OrderPanel />}
                 {activeComponent === "cart" && <CartPanel />}
-                {activeComponent === "purchased" && <PurchasedPanel />}
+                {activeComponent === "purchased" && <PurchasedPanel />} */}
             </div>
         </>
     ) : (

@@ -1,7 +1,9 @@
 import React from "react";
-import { ProductsProps } from "./products";
+import { ProductsProps } from "./productsProps";
 
 export interface useSearchProps {
-    products: ProductsProps[];
-    searchProduct: (proudtcName: string) => void;
+    products: ProductsProps[] | []
+    request: string
+    setRequest: (input:string) => void
+    searchProduct: (proudtcName: string) => void
 }
