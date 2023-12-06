@@ -18,7 +18,6 @@ const LoginPage = () => {
     ) => {
         try {
             const data = await loginService(name, password);
-
             if (data) {
                 login(data.data.user);
                 navigate("/");

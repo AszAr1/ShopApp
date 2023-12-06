@@ -17,13 +17,16 @@ import CartPage from "./Pages/CartPage/CartPage";
 import { Successfully } from "./Pages/Successfully/Successfully";
 import { useOrder } from "./stores/order";
 import { ProtectedRoute } from "./guards/CheckAuthRoute";
+import CartPanel from "./components/ProfilePage/CartPanel";
+import OrderPanel from "./components/ProfilePage/OrderPanel";
+import ProfilePanel from "./components/ProfilePage/ProfilePanel/ProfilePanel";
 
 
 function App() {
     const loginUser = useUser((state) => state.loginUser);
     const logOutUser = useUser((state) => state.logout);
     const isLogged = useUser((state) => state.login);
-    const getOrders = useOrder(state => state.setOrder)
+    const getOrders = useOrder(state => state.setOrder);
 
     const checkAuth = async () => {
         const token = localStorage.getItem('token');
@@ -47,9 +50,6 @@ function App() {
         checkAuth();
     }, []);
 
-    
-
-
     return (
         <>
             <Routes>
@@ -65,12 +65,15 @@ function App() {
                     path="/hoodie/:productId"
                     element={<HoodieProductPage />}
                 />
-                <Route path="/hoodie/" element={<HoodiesPage />} />
+                <Route path="hoodie" element={<HoodiesPage />} />
                 <Route element={< ProtectedRoute/>}>
                     //FavoritesPage
-                    <Route path="/favorites/" element={<FavoritesPage />} />
+                    <Route path="favorites" element={<FavoritesPage />} />
                     //ProfilePage
-                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="profile" element={<ProfilePage />}/> 
+                    <Route path='/profile/order-panel' element={<OrderPanel />} />
+                    <Route path='/profile/profile-panel' element={<ProfilePanel />}/>
+                    <Route path='/profile/cart-panel' element={<CartPanel />} /> 
                     //CartPage
                     <Route path='/cart' element={<CartPage />} />
                     <Route path="/successfully" element={<Successfully />} />

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { NoItems } from "../../components/NoItems/NoItems";
-import OrderList from "../../components/OrderList/OrderList";
+import {OrderList} from "../../components/OrderList/OrderList";
 import { useOrder } from "../../stores/order";
 import { useNavigate } from "react-router-dom";
 

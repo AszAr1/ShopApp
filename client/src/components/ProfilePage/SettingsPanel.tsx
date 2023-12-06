@@ -1,16 +1,13 @@
 import { FC } from "react";
 import { useUser } from "../../stores/user";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFavorite } from "../../stores/favorite";
 
-interface SettingsPanel {
-    activeComponentRender: (component: string) => void;
-}
-
-const SettingsPanel: FC<SettingsPanel> = (props) => {
+const SettingsPanel = () => {
     const removeUser = useUser((state) => state.logout);
     const push = useNavigate();
-    const {clearFavorites} = useFavorite()
+    const {clearFavorites} = useFavorite();
+    const nav = useNavigate();
 
     const logOut = () => {
         removeUser();
@@ -18,9 +15,15 @@ const SettingsPanel: FC<SettingsPanel> = (props) => {
         push("/");
     };
 
+    function HandleClick (component: string, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        e.preventDefault();
+        nav(`/profile/${component}`);
+    }
+
     return (
         <>
             <div className="desktop:flex hidden h-screen w-[500px] flex-col items-center justify-center border-r-2 border-solid border-black p-5">
+
                 <div className="relative h-[200px] w-[200px] overflow-hidden rounded-full border-2 border-solid border-black">
                     <img
                         className="absolute"
@@ -30,34 +33,22 @@ const SettingsPanel: FC<SettingsPanel> = (props) => {
 
                 <div className="mt-10 flex w-full flex-col items-start justify-center rounded-lg border-2 border-solid border-black p-10">
                     <button
-                        onClick={() => props.activeComponentRender("profile")}
+                        onClick={e => HandleClick("profile-panel", e)}
                         className="flex w-full items-start rounded-md p-2 font-mono text-lg hover:bg-gray-200"
                     >
                         Profile
                     </button>
                     <button
-                        onClick={() => props.activeComponentRender("security")}
-                        className="my-3 flex w-full items-start rounded-md p-2 font-mono text-lg hover:bg-gray-200"
-                    >
-                        Security
-                    </button>
-                    <button
-                        onClick={() => props.activeComponentRender("order")}
+                        onClick={e => HandleClick("order-panel", e)}
                         className="flex w-full items-start rounded-md p-2 font-mono text-lg hover:bg-gray-200"
                     >
                         Order
                     </button>
                     <button
-                        onClick={() => props.activeComponentRender("cart")}
-                        className="mt-3 flex w-full items-start rounded-md p-2 font-mono text-lg hover:bg-gray-200"
+                        onClick={e => HandleClick("cart-panel", e)}
+                        className="flex w-full items-start rounded-md p-2 font-mono text-lg hover:bg-gray-200"
                     >
                         Cart
-                    </button>
-                    <button
-                        onClick={() => props.activeComponentRender("purchased")}
-                        className="mt-3 flex w-full items-start rounded-md p-2 font-mono text-lg hover:bg-gray-200"
-                    >
-                        Purchased goods
                     </button>
                     <button
                         onClick={logOut}

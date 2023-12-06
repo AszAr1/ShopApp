@@ -1,11 +1,16 @@
+import { FC } from "react"
 import { IOrderList } from "../../models/ordersProps"
 
-export default function OrderList(props: IOrderList[] | []) {
+type Props = {
+    orders: IOrderList[] | []
+}
+
+export const OrderList:FC<Props> = ({orders}) => {
     return (
         <>
             <section className="w-full h-full">
                 {/* @ts-ignore */}
-               {props.orders.map(el => (
+               {orders.map(el => (
                 // @ts-ignore
                 el.products.map(pr => (
                     <div className="flex laptop:flex-row flex-col justify-between items-center p-4 rounded-md border-2 border-black border-solid my-4" key={pr.id}>
