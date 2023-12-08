@@ -1,41 +1,60 @@
 import { useState } from "react";
 import SettingsPanel from "../../components/ProfilePage/SettingsPanel";
-import Profile from "../../components/ProfilePage/ProfilePanel/ProfilePanel";
-import SecurityPanel from "../../components/ProfilePage/SecurityPanel";
-import OrderPanel from "../../components/ProfilePage/OrderPanel";
-import CartPanel from "../../components/ProfilePage/CartPanel";
-import PurchasedPanel from "../../components/ProfilePage/PurchasedPanel";
-import { useUser } from "../../stores/user";
-import NotLogin from "../AuthorizationPage/NotLogin";
+import { Link, useNavigate } from "react-router-dom";
 
 function ProfilePage() {
-    const [activeComponent, setActiveComponent] = useState<null | String>(null);
-    const isLogin = useUser((state) => state.login);
+    const navigate = useNavigate();
 
-    const activeComponentRender = (component: string) => {
-        setActiveComponent(component);
-    };
+    const [openModal, setOpenModal] = useState<boolean>(false);
 
-    return isLogin ? (
+    function HandleClick(e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+        setOpenModal(prev => !prev);
+    }
+
+    function HandleOpenPanel(component: string) {
+        navigate(`/profile/${component}`)
+        setOpenModal(false);
+    }
+
+    return (
         <>
             <div className={"flex h-screen w-full items-start justify-center"}>
-                <SettingsPanel activeComponentRender={activeComponentRender} />
+                <SettingsPanel />
 
-                {/* {!activeComponent && (
-                    <div className="flex h-full w-full items-center justify-center font-mono text-7xl">
-                        (◕‿◕)
-                    </div>
-                )}
-                <Profile />
-                {/* {activeComponent === "security" && <SecurityPanel />}
-                {activeComponent === "order" && <OrderPanel />}
-                {activeComponent === "cart" && <CartPanel />}
-                {activeComponent === "purchased" && <PurchasedPanel />} */}
+
+                <div className="flex flex-col h-full w-full items-center justify-center">
+                    <h1 className={`font-mono text-7xl laptop:flex hidden`}>(◕‿◕)</h1>
+                    <button
+                        onClick={e => HandleClick(e)}
+                        className={`laptop:hidden flex px-5 py-4 rounded-lg bg-black text-4xl font-mono text-white`}>(◕‿◕)
+                    </button>
+                </div>
+
+
+                {openModal &&
+                    <dialog
+                        className={`flex flex-col justify-center items-center mt-14 p-8 border-2 border-solid border-black rounded-md `}>
+                        <Link
+                            to={"profile-panel"}
+                            onClick={() => setOpenModal(false)}
+                            className={`flex justify-center items-center w-[200px] rounded-lg my-2 bg-black text-white px-3 py-2`}
+                        >Profile</Link>
+                        <Link
+                            to={"order-panel"}
+                            onClick={() => setOpenModal(false)}
+                            className={`flex justify-center items-center w-full rounded-lg my-2 bg-black text-white px-3 py-2`}
+                        >Order</Link>
+                        <Link
+                            to={"cart-panel"}
+                            onClick={() => setOpenModal(false)}
+                            className={`flex justify-center items-center w-full rounded-lg my-2 bg-black text-white px-3 py-2`}
+                        >Cart</Link>
+                    </dialog>
+                }
             </div>
         </>
-    ) : (
-        <NotLogin />
-    );
+    )
 }
 
 export default ProfilePage;

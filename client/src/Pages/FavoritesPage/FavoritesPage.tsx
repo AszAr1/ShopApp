@@ -9,15 +9,17 @@ function FavoritesPage() {
 
     const authorization:boolean = useUser((state) => state.login);
     const [favorites, setFavorites] = useState<ProductsProps[] | []>([])
-    const isLoading = false
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     useEffect(() => {
             try {
-               FavoritesService.getFavorites().then(data => {
+               FavoritesService.getFavorites()
+               .then(data => {
                    //@ts-ignore
                    setFavorites(data.data)
-               })
+                   setIsLoading(false);
+               }).catch(e => console.log(e))
             } catch (err) {
-                console.error(err);
+                console.log(err);
             }
             return () => {
                setFavorites([])

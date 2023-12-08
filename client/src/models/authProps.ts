@@ -8,7 +8,7 @@ export interface useAuthorizationProps {
     isRegister: boolean;
     login: boolean;
     loginUser: (user: User) => void;
-    registration: (name: string, email: string) => void;
+    registration: (user: User) => void;
     logout: () => void;
 }
 

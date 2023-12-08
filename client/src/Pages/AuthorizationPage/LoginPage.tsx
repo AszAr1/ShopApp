@@ -2,7 +2,7 @@ import Form from "../../components/UI/Form";
 import AuthService from "../../service/AuthService";
 import { useUser } from "../../stores/user";
 import { useNavigate } from "react-router-dom";
-import { HiExclamation, HiX } from 'react-icons/hi';
+import { HiExclamation, HiX } from "react-icons/hi";
 import { useState } from "react";
 import { Notification } from "../../components/Notification/Notification";
 const LoginPage = () => {
@@ -18,7 +18,6 @@ const LoginPage = () => {
     ) => {
         try {
             const data = await loginService(name, password);
-
             if (data) {
                 login(data.data.user);
                 navigate("/");
@@ -26,15 +25,14 @@ const LoginPage = () => {
         } catch (error) {
             setShowToast(true);
         }
-
     };
 
     return (
         <>
             {showToast && (
-                <Notification 
-                negativeDescription="Auth failed. Please check your password or username." 
-                setShowToast={setShowToast}
+                <Notification
+                    negativeDescription="Auth failed. Please check your password or username."
+                    setShowToast={setShowToast}
                 />
             )}
             <Form
@@ -45,7 +43,6 @@ const LoginPage = () => {
                 underText2="Register"
                 link={"register"}
             />
-
         </>
     );
 };

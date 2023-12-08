@@ -3,7 +3,6 @@ export interface AuthResponse {
     refresh: string;
     user: UserProps;
 }
-
 export interface UserProps {
     username: string;
     password: string;

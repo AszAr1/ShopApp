@@ -12,11 +12,15 @@ export default class AuthService {
             username: username,
             password: password,
         };
-        const response = await $api.post<AuthResponse>("/login/", user);
-        localStorage.setItem("token", response.data.access)
-        localStorage.setItem("refreshToken", response.data.refresh)
-        localStorage.setItem("username", response.data.user.username)
-        return response;
+        try {
+            const response = await $api.post<AuthResponse>("/login/", user);
+            localStorage.setItem("token", response.data.access);
+            localStorage.setItem("refreshToken", response.data.refresh);
+            localStorage.setItem("username", response.data.user.username);
+            return response;
+        } catch (e){
+            throw e;
+        }
     }
 
     static async register(
@@ -43,7 +47,7 @@ export default class AuthService {
 
     static async logout(): Promise<void> {
         console.log(localStorage.getItem("refreshToken"));
-        localStorage.removeItem('username')
+        localStorage.removeItem('username');
         return $api.post("/logout/", localStorage.getItem("refreshToken"));
     }
 
