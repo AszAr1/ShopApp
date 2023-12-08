@@ -7,6 +7,7 @@ export const useUser = create<useAuthorizationProps>()(
         user: {
             username: null,
             email: null,
+            id: null,
         },
         isRegister: false,
         login: false,
@@ -25,12 +26,12 @@ export const useUser = create<useAuthorizationProps>()(
             }
         },
 
-        async registration(name, email) {
+        async registration(user) {
             try {
                 set({
                     user: {
-                        username: name,
-                        email: email,
+                        username: user.username,
+                        email: user.email,
                     },
                     login: true,
                 });
@@ -41,9 +42,9 @@ export const useUser = create<useAuthorizationProps>()(
 
         async logout() {
             try {
-                localStorage.removeItem("token")
-                localStorage.removeItem("refreshToken")
-                localStorage.removeItem("username")
+                localStorage.removeItem("token");
+                localStorage.removeItem("refreshToken");
+                localStorage.removeItem("username");
                 set({
                     user: {
                         username: null,

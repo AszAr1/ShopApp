@@ -27,7 +27,7 @@ const ProfilePanel = () => {
     }
     return (
         <>
-            <div className="flex flex-row h-full w-full justify-start items-center">
+            <div className="flex flex-row h-screen w-screen justify-start items-center">
                 <SettingsPanel />
                 <div className="laptop:grid-cols-2 laptop:grid-rows-2 laptop:gap-4 laptop:p-10 grid h-full w-full grid-cols-1 gap-4 p-2">
 
@@ -101,10 +101,13 @@ const ProfilePanel = () => {
                         </dialog>
                     }
                 </div>
+                <Modal isOpen={open} openFunc={handleOpenModal} />
             </div>
 
 
-            <Modal isOpen={open} openFunc={handleOpenModal} />
+            
+
+            
         </>
     );
 };
