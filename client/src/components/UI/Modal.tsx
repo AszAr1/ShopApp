@@ -27,7 +27,7 @@ const Modal: FC<ModalProps> = (props) => {
             const formData = new FormData();
             formData.append("profile_picture", file);
 
-            const response = await $api.patch(`profile/${user.username}`, user);
+            const response = await $api.patch(`profile/${user.username}/`, {profile_picture: formData});
 
             console.log("File uploaded successfully:", response.data);
         } catch (error) {
