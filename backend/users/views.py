@@ -2,6 +2,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
+from rest_framework.parsers import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -54,18 +55,37 @@ class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     lookup_field = 'username'
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser, FormParser]
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
+        # print(request.user)
+        # serializer = CustomUserSerializer(request.user, request.data, partial=True)
+        # serializer.is_valid(raise_exception=True)
+        # serializer.save()
+        # return Response(serializer.data)
         return super().patch(request, *args, **kwargs)
     
     def put(self, request, *args, **kwargs):
+        # print(request.data)
+        # print(request.data['profile_picture'])
+        # image: InMemoryUploadedFile = request.data['profile_picture'] 
+        # print(image.name)
+        # print(image.)
         return super().put(request, *args, **kwargs)
 
 
-class CustomUserAPIView(ListAPIView):
+class CustomUserAPIView(ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

@@ -1,3 +1,4 @@
+from calendar import c
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
@@ -28,30 +29,20 @@ class MainAPIView(ListAPIView):
         self.queryset = self.filter_queryset(self.queryset)
         self.queryset = self.queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else self.queryset
         return super().list(request, *args, **kwargs)
-
-    def perform_create(self, serializer):
-        title = serializer.validated_data.get('title')
-        description = serializer.validated_data.get('description') or None
-        content = serializer.validated_data.get('content') or None 
-        if content is None:
-           content = title
-        if description is None:
-            description = title
-
-        serializer.save()
   
 
 class FavoritesAPIView(ListAPIView, DestroyAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         favorite_queryset = Favorite.objects.filter(user=request.user.id)
         data = FavoriteSerializer(favorite_queryset, many=True).data
+        
         for datum in data:
             product = ProductSerializer(Product.objects.get(id=datum['product']), context={'request': request}).data
             datum.update({'product': product})
+
         return Response(data=data, status=status.HTTP_200_OK)
     
     def delete(self, request, *args, **kwargs):
@@ -62,66 +53,70 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ProductDetailAPIView(RetrieveDestroyAPIView, CreateAPIView):
+class ProductDetailAPIView(RetrieveDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get_serializer(self, *args, **kwargs):
-        if self.request.method == "POST":
-            if 'quantity' in self.request.data.keys():
-                serializer_class = CartItemSerializer
-            else: 
-                serializer_class = FavoriteSerializer
-        else: 
-            serializer_class = ProductSerializer
 
-        kwargs.setdefault('context', self.get_serializer_context()) 
-        return serializer_class(*args, **kwargs)
-    
+class AddFavoriteAPIView(CreateAPIView):
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteSerializer
+
     def post(self, request, *args, **kwargs):
         data = self.request.data.copy()
         data['user'] = request.user.id
-            
-        serializer = self.get_serializer(data=data)
-        if serializer.__class__.__name__ is FavoriteSerializer.__name__ and Favorite.objects.filter(user=data['user'], product=data['product']).exists():
-            return Response(data={"message": "This product is already in Favorites"}, status=status.HTTP_400_BAD_REQUEST)
 
+        if Favorite.objects.filter(user=data['user'], product=data['product']).exists():
+            return Response(data={"error": "This product is already in Favorites"}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
-    def delete(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AddCartItemAPIView(CreateAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = self.request.data.copy()
+        data['user'] = request.user.id
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class CartAPIView(ListCreateAPIView):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer 
-    permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         data = CartItemSerializer(CartItem.objects.filter(user=request.user.id), many=True).data
+        
         for datum in data:
             product = ProductSerializer(Product.objects.get(id=datum['product']), context={'request': request}).data
             datum.update({'product': product})
+
         return Response(data=data, status=status.HTTP_200_OK)
     
     def post(self, request, *args, **kwargs):
         if len(CartItem.objects.filter(user=request.user.id)) == 0:
-            return Response(data={"message": "No products in cart"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"error": "No products in cart"}, status=status.HTTP_400_BAD_REQUEST)
         
         order_serializer = OrderSerializer(data={'user': request.user.id})
         order_serializer.is_valid(raise_exception=True)
         order_serializer.save()
         headers = self.get_success_headers(order_serializer.validated_data)
-        cart_items = CartItem.objects.filter(user=request.user.id)
         order_id = Order.objects.filter(user=request.user.id).last().id
-        print(order_serializer['id'])
+        cart_items = CartItem.objects.filter(user=request.user.id)
 
         for item in cart_items:
             item_data = {"product": item.product.id, 'quantity': item.quantity, 'order': order_id}
@@ -137,7 +132,6 @@ class CartAPIView(ListCreateAPIView):
 class OrdersAPIView(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         orders = OrderSerializer(self.queryset.filter(user=request.user.id), many=True).data
@@ -152,7 +146,6 @@ class OrdersAPIView(ListAPIView):
 class HoodiesListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Hoodies')
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def filter_queryset(self, request, queryset):
         return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
@@ -165,7 +158,6 @@ class HoodiesListAPIView(ListAPIView):
 class SneakersListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Sneakers')
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def filter_queryset(self, request, queryset):
         return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
