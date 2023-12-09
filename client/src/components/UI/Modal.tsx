@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { $api } from "../../API";
+import { $apiImage } from "../../API";
 import { useUser } from "../../stores/user";
 
 interface ModalProps {
@@ -27,7 +27,7 @@ const Modal: FC<ModalProps> = (props) => {
             const formData = new FormData();
             formData.append("profile_picture", file);
 
-            const response = await $api.patch(`profile/${user.username}/`, {profile_picture: formData});
+            const response = await $apiImage.patch(`profile/${user.username}/`, {"profile_picture": formData});
 
             console.log("File uploaded successfully:", response.data);
         } catch (error) {
@@ -53,7 +53,7 @@ const Modal: FC<ModalProps> = (props) => {
                     onChange={(e) => handleImageUpload(e)}
                     type="file"
                     accept="image/*"
-                    multiple={false}
+                    // multiple={false}
                     className={`laptop:w-1/3 mt-4 w-2/3 rounded-md border-2 border-solid border-black bg-black p-3 font-mono font-bold text-white
                         transition-all duration-300 file:hidden hover:bg-white hover:text-black`}
                 />
