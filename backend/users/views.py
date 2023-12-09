@@ -55,32 +55,13 @@ class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     lookup_field = 'username'
-    permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
-
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
-    def patch(self, request, *args, **kwargs):
-        # print(request.user)
-        # serializer = CustomUserSerializer(request.user, request.data, partial=True)
-        # serializer.is_valid(raise_exception=True)
-        # serializer.save()
-        # return Response(serializer.data)
-        return super().patch(request, *args, **kwargs)
-    
-    def put(self, request, *args, **kwargs):
-        # print(request.data)
-        # print(request.data['profile_picture'])
-        # image: InMemoryUploadedFile = request.data['profile_picture'] 
-        # print(image.name)
-        # print(image.)
-        return super().put(request, *args, **kwargs)
 
 
 class CustomUserAPIView(ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         print(request.data)
