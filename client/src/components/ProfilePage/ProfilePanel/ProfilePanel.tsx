@@ -3,12 +3,14 @@ import { useState } from "react";
 import Modal from "../../UI/Modal";
 import SettingsPanel from "../SettingsPanel";
 import { Link, useNavigate } from "react-router-dom";
+import { $api, $apiImage } from "../../../API";
 
 
 const ProfilePanel = () => {
     const user = useUser((state) => state.user);
     const [open, setOpen] = useState(false);
     const [openModal, setOpenModal] = useState<boolean>(false);
+    const [username, setUsernmae] = useState<string>("");
     const nav = useNavigate();
 
     function HandleClick(e: React.MouseEvent<HTMLButtonElement>) {
@@ -21,10 +23,16 @@ const ProfilePanel = () => {
         setOpenModal(false);
     }
 
+    function HandleUpdateName(){
+        const userName = localStorage.getItem('username')
+        $apiImage.patch(`profile/${userName}/`, {"username": username}).then(response => console.log(response.data)).catch(e => console.log(e));
+    }
 
     function handleOpenModal() {
         setOpen((prev) => !prev);
     }
+
+
     return (
         <>
             <div className="flex flex-row h-screen w-screen justify-start items-center">
@@ -75,9 +83,13 @@ const ProfilePanel = () => {
                         <div className="laptop:items-start flex flex-col items-center justify-center">
                             <h1>Change name</h1>
                             <input
+                                type="text"
+                                value={username}
+                                onChange={e => setUsernmae(e.target.value)}
                                 className="p-2 outline-none "
                                 placeholder="New name"
                             />
+                            <button onClick={HandleUpdateName}>Change name</button>
                         </div>
                     </div>
 

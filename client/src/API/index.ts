@@ -14,6 +14,18 @@ export const $api = axios.create({
     },
 });
 
+export const $apiImage = axios.create({
+    baseURL: API_URL,
+    headers: {
+        "Content-Type": 'multipart/form-data',
+        Authorization:
+            `Bearer ${token}` === `Bearer ` + null ||
+            `Bearer ${token}` === `Bearer ` + undefined
+                ? ""
+                : `Bearer ${token}`,
+    },
+})
+
 // export function getToken() {
 //     const token = localStorage.getItem('token')
 //     return token
