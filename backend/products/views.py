@@ -146,6 +146,7 @@ class OrdersAPIView(ListAPIView):
 class HoodiesListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Hoodies')
     serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
 
     def filter_queryset(self, request, queryset):
         return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
@@ -158,6 +159,7 @@ class HoodiesListAPIView(ListAPIView):
 class SneakersListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Sneakers')
     serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
 
     def filter_queryset(self, request, queryset):
         return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
