@@ -1,3 +1,4 @@
+import stat
 from rest_framework.mixins import Response, status
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -29,30 +30,28 @@ class MainAPIView(ListAPIView):
     ordering_fields = ['price']
     permission_classes = [AllowAny]
 
-    def list(self, request, *args, **kwargs):
-        self.queryset = self.filter_queryset(self.queryset)
-        self.queryset = self.queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else self.queryset
-        return super().list(request, *args, **kwargs)
-  
+    def list(self, request):
+        self.queryset = self.filter_queryset(self.queryset)[:int(request.query_params['filter'])] \
+            if 'filter' in request.query_params else self.filter_queryset(self.queryset)
+            
+        return Response(self.get_serializer(self.queryset, many=True).data)  
+        
 
 class FavoritesAPIView(ListAPIView, DestroyAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
 
     def list(self, request):
-        favorite_queryset = Favorite.objects.filter(user=request.user.id)
-        data = FavoriteSerializer(favorite_queryset, many=True).data
-        
-        for datum in data:
+        for datum in (data := FavoriteSerializer(Favorite.objects.filter(user=request.user.id), many=True).data):
             product = ProductSerializer(Product.objects.get(id=datum['product']), context={'request': request}).data
-            datum.update({'product': product})
+            datum['product'] = product
 
-        return Response(data=data, status=status.HTTP_200_OK)
+        return Response(data=data)
     
     def delete(self, request):
-        if (request.data['product'] is None or request.data['product'] == '' or 
-            not Favorite.objects.filter(user=request.user.id, product=request.data['product']).exists()):
-            return Response(data={'error': 'No such product in favorites'}, status=status.HTTP_400_BAD_REQUEST)
+        if request.data['product'] is None or request.data['product'] == '' or \
+            not Favorite.objects.filter(user=request.user.id, product=request.data['product']).exists():
+            return Response(data={'error': 'No such product in favorites'}, status=status.HTTP_404_NOT_FOUND)
         
         Favorite.objects.get(user=request.user.id, product=request.data['product']).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -15,7 +15,7 @@ class CustomUserRegistrationAPIView(CreateAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [AllowAny]
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         data = request.data.copy()
         data['password'] = make_password(request.data['password'])
         serializer = self.get_serializer(data=data)
@@ -29,23 +29,25 @@ class CustomUserRegistrationAPIView(CreateAPIView):
             'email': user.email, 
             'profile-picture': user.profile_picture.url if user.profile_picture != '' else None
         }
-        token_data = TokenObtainPairSerializer().validate({'username': request.data['username'], 'password': request.data['password']})
+        token_data = TokenObtainPairSerializer().validate({
+            'username': request.data['username'], 
+            'password': request.data['password'],
+        })
         token_data['user'] = user_data
         return Response(token_data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class CustomUserAuthorizationAPIView(TokenObtainPairView):
-    def post(self, request, *args, **kwargs) -> Response:
+    def post(self, request):
         if not 'username' in request.data.keys():
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(data={"error": 'No user with this username'}, status=status.HTTP_404_NOT_FOUND)
         
         user = CustomUser.objects.get(username=request.data['username'])
-        try:
-            profile_picture = user.profile_picture.url
-        except ValueError:
-            profile_picture = None
-        user_data = {'username': user.username, 'email': user.email, 'profile-picture': profile_picture or None}
-        print(request.data) 
+        user_data = {
+            'username': user.username, 
+            'email': user.email, 
+            'profile-picture': user.profile_picture.url if user.profile_picture != '' else None
+        }
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data.copy()

@@ -2,15 +2,17 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .views import (AddCartItemAPIView, 
-                    AddFavoriteAPIView, 
-                    MainAPIView, 
-                    ProductDetailAPIView, 
-                    FavoritesAPIView, 
-                    CartAPIView, 
-                    OrdersAPIView, 
-                    HoodiesListAPIView, 
-                    SneakersListAPIView,)
+from .views import (
+    AddCartItemAPIView, 
+    AddFavoriteAPIView, 
+    MainAPIView, 
+    ProductDetailAPIView, 
+    FavoritesAPIView, 
+    CartAPIView, 
+    OrdersAPIView, 
+    HoodiesListAPIView, 
+    SneakersListAPIView,
+)
 
 
 urlpatterns = [
