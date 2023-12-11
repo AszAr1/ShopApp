@@ -9,14 +9,16 @@ class Product(RandomIDModel, models.Model):
         ('Sneakers', 'Sneakers'),
         ('Hoodies', 'Hoodies'),
     )
-    SIZES = {'SHOES' : [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
-             'CLOTHES' : ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']}
+    SIZES = {
+        'SHOES' : [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50],
+        'CLOTHES' : ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
+    }
     title = models.CharField(max_length=50, blank=False, unique=True)
     description = models.TextField(max_length=1000, blank=True)
     content = models.TextField(max_length=1000, blank=True)
     category = models.CharField(max_length=30, choices=CHOICES)
     price = models.DecimalField(decimal_places=2, max_digits=7, default=99.99)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(null=True)
     pub_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -36,9 +38,9 @@ class Product(RandomIDModel, models.Model):
 
 
 class CartItem(RandomIDModel, models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    quantity = models.PositiveIntegerField(blank=False, null=False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
 
     class Meta:
         verbose_name = "Cart item"
@@ -78,9 +80,9 @@ class Order(RandomIDModel, models.Model):
         DISPUTED: 'Disputed',
     }
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=30, default=STATUS_CHOICES[PENDING], null=True)
+    status = models.CharField(max_length=30, default=STATUS_CHOICES[PENDING])
 
     class Meta:
         verbose_name = "Order"
@@ -95,9 +97,9 @@ class Order(RandomIDModel, models.Model):
         
 
 class OrderItem(RandomIDModel, models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name = "Order item"
@@ -112,8 +114,8 @@ class OrderItem(RandomIDModel, models.Model):
 
 
 class Favorite(RandomIDModel, models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Favorite"

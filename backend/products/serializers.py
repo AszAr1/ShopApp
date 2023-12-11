@@ -15,8 +15,8 @@ class GetID():
 
 
 class ProductSerializer(ModelSerializer, GetID):   
-    sizes = SerializerMethodField(read_only=True)
     id = SerializerMethodField(read_only=True)
+    sizes = SerializerMethodField(read_only=True)
     see_more = HyperlinkedIdentityField(view_name='product-detail', lookup_field='pk')
 
     class Meta:
@@ -50,6 +50,7 @@ class OrderSerializer(ModelSerializer, GetID):
             return None
         if not isinstance(obj, Order):
             return None
+        
         return obj.get_price()
     
 
@@ -58,7 +59,7 @@ class FavoriteSerializer(ModelSerializer, GetID):
 
     class Meta:
         model = Favorite
-        fields = ['id', 'user', 'product']
+        fields = '__all__'
 
 
 class CartItemSerializer(ModelSerializer, GetID):
