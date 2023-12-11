@@ -1,10 +1,14 @@
-from calendar import c
-from rest_framework.generics import *
-from rest_framework.mixins import *
-from rest_framework.permissions import *
-from rest_framework.authentication import *
+from rest_framework.mixins import Response, status
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.generics import (
+    ListAPIView, 
+    ListCreateAPIView,
+    CreateAPIView, 
+    RetrieveAPIView, 
+    DestroyAPIView, 
+)
 
 from .models import Product, Favorite, CartItem, Order, OrderItem
 from .serializers import (
@@ -35,7 +39,7 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request):
         favorite_queryset = Favorite.objects.filter(user=request.user.id)
         data = FavoriteSerializer(favorite_queryset, many=True).data
         
@@ -45,15 +49,16 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
 
         return Response(data=data, status=status.HTTP_200_OK)
     
-    def delete(self, request, *args, **kwargs):
-        if request.data.get('id') is None or request.data.get('id') == '':
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request):
+        if (request.data['product'] is None or request.data['product'] == '' or 
+            not Favorite.objects.filter(user=request.user.id, product=request.data['product']).exists()):
+            return Response(data={'error': 'No such product in favorites'}, status=status.HTTP_400_BAD_REQUEST)
         
-        Favorite.objects.get(id=request.data.get('id')).delete()
+        Favorite.objects.get(user=request.user.id, product=request.data['product']).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ProductDetailAPIView(RetrieveDestroyAPIView):
+class ProductDetailAPIView(RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
@@ -64,14 +69,14 @@ class AddFavoriteAPIView(CreateAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
 
-    def post(self, request, *args, **kwargs):
-        request.data._mutable = True
-        request.data['user'] = request.user.id
+    def post(self, request):
+        data = request.data.copy()
+        data['user'] = request.user.id
 
-        if Favorite.objects.filter(user=request.data['user'], product=request.data['product']).exists():
+        if Favorite.objects.filter(user=data['user'], product=data['product']).exists():
             return Response(data={"error": "This product is already in Favorites"}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
@@ -82,11 +87,11 @@ class AddCartItemAPIView(CreateAPIView):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
 
-    def post(self, request, *args, **kwargs):
-        request.data._mutable = True
-        request.data['user'] = request.user.id
+    def post(self, request):
+        data = request.data.copy()
+        data['user'] = request.user.id
 
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         
@@ -98,16 +103,15 @@ class CartAPIView(ListCreateAPIView):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer 
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request):
         data = CartItemSerializer(CartItem.objects.filter(user=request.user.id), many=True).data
-        
         for datum in data:
             product = ProductSerializer(Product.objects.get(id=datum['product']), context={'request': request}).data
             datum.update({'product': product})
 
         return Response(data=data, status=status.HTTP_200_OK)
-    
-    def post(self, request, *args, **kwargs):
+     
+    def post(self, request):
         if len(CartItem.objects.filter(user=request.user.id)) == 0:
             return Response(data={"error": "No products in cart"}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -133,7 +137,7 @@ class OrdersAPIView(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request):
         orders = OrderSerializer(self.queryset.filter(user=request.user.id), many=True).data
         
         for order in orders:
@@ -151,7 +155,7 @@ class HoodiesListAPIView(ListAPIView):
     def filter_queryset(self, request, queryset):
         return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request):
         self.queryset = self.filter_queryset(request, self.get_queryset())
         return Response(self.get_serializer(self.queryset, many=True).data, status=status.HTTP_200_OK)
     
@@ -164,6 +168,6 @@ class SneakersListAPIView(ListAPIView):
     def filter_queryset(self, request, queryset):
         return queryset[:int(request.query_params['filter'])] if 'filter' in request.query_params else queryset
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request):
         self.queryset = self.filter_queryset(request, self.get_queryset())
         return Response(self.get_serializer(self.queryset, many=True).data, status=status.HTTP_200_OK)

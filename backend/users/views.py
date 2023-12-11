@@ -1,8 +1,8 @@
 from django.contrib.auth.hashers import make_password
-from rest_framework.generics import *
-from rest_framework.mixins import *
-from rest_framework.permissions import *
-from rest_framework.parsers import *
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAPIView 
+from rest_framework.mixins import Response, status
+from rest_framework.permissions import AllowAny
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -53,22 +53,14 @@ class CustomUserAuthorizationAPIView(TokenObtainPairView):
         return Response(data=data, status=status.HTTP_200_OK)
     
     
-class CustomUserProfileAPIView(RetrieveAPIView, UpdateAPIView):
+class CustomUserProfileAPIView(RetrieveUpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     lookup_field = 'username'
     parser_classes = [MultiPartParser, FormParser]
 
 
-class CustomUserAPIView(ListCreateAPIView):
+class CustomUserAPIView(ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [AllowAny]
-
-    def post(self, request, *args, **kwargs):
-        print(request.data)
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
