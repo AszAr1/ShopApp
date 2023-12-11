@@ -65,13 +65,13 @@ class AddFavoriteAPIView(CreateAPIView):
     serializer_class = FavoriteSerializer
 
     def post(self, request, *args, **kwargs):
-        data = self.request.data.copy()
-        data['user'] = request.user.id
+        request.data._mutable = True
+        request.data['user'] = request.user.id
 
-        if Favorite.objects.filter(user=data['user'], product=data['product']).exists():
+        if Favorite.objects.filter(user=request.data['user'], product=request.data['product']).exists():
             return Response(data={"error": "This product is already in Favorites"}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.get_serializer(data=data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
@@ -83,10 +83,10 @@ class AddCartItemAPIView(CreateAPIView):
     serializer_class = CartItemSerializer
 
     def post(self, request, *args, **kwargs):
-        data = self.request.data.copy()
-        data['user'] = request.user.id
+        request.data._mutable = True
+        request.data['user'] = request.user.id
 
-        serializer = self.get_serializer(data=data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         

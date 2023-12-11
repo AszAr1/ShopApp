@@ -13,20 +13,22 @@ from .serializers import CustomUserSerializer
 class CustomUserRegistrationAPIView(CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
-        data['password'] = make_password(data['password'])
+        data['password'] = make_password(request.data['password'])
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        user = CustomUser.objects.get(username=request.data['username'])
-        try:
-            profile_picture = user.profile_picture.url
-        except ValueError:
-            profile_picture = None
-        user_data = {'username': user.username, 'email': user.email, 'profile-picture': profile_picture or None}
+        user = CustomUser.objects.get(username=data['username'])
+
+        user_data = {
+            'username': user.username, 
+            'email': user.email, 
+            'profile-picture': user.profile_picture.url if user.profile_picture != '' else None
+        }
         token_data = TokenObtainPairSerializer().validate({'username': request.data['username'], 'password': request.data['password']})
         token_data['user'] = user_data
         return Response(token_data, status=status.HTTP_201_CREATED, headers=headers)
