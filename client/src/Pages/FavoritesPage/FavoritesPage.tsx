@@ -1,32 +1,55 @@
-import { useUser } from "../../stores/user";
-import { Favorites } from "../../components/Favorites/Favorites";
-import NotLogin from "../AuthorizationPage/NotLogin";
-import {useEffect, useState} from "react";
-import {ProductsProps} from "../../models/productsProps";
-import {FavoritesService} from "../../service/FavoritesService";
+import { useEffect, useState } from "react";
+import { IProducts } from "../../models/IProducts";
+import NoItems from "../../components/NoItems/NoItems";
+import { FavoritesService } from "../../services/favorites.service";
+import Card from "../../components/Card/Card";
 
 function FavoritesPage() {
+  const [favorites, setFavorites] = useState<IProducts[] | []>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const authorization:boolean = useUser((state) => state.login);
-    const [favorites, setFavorites] = useState<ProductsProps[] | []>([])
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    useEffect(() => {
-            try {
-               FavoritesService.getFavorites()
-               .then(data => {
-                   //@ts-ignore
-                   setFavorites(data.data)
-                   setIsLoading(false);
-               }).catch(e => console.log(e))
-            } catch (err) {
-                console.log(err);
-            }
-            return () => {
-               setFavorites([])
-            };
-    }, []);
-    
-    return authorization ? <Favorites favorites={favorites} isLoading={isLoading} /> : <NotLogin/>;
+  useEffect(() => {
+    try {
+      FavoritesService.getFavorites()
+        .then(data => {
+          setFavorites(data.data)
+          setIsLoading(false);
+        })
+        .catch(e => console.log(e))
+
+    } catch (err) {
+      console.log(err);
+    }
+    return () => {
+      setFavorites([])
+    };
+
+  }, []);
+
+  if (favorites.length === 0) {
+    return (
+      <NoItems title="favorites" />
+    );
+  } else {
+    return (
+      <div className="w-full h-full">
+        {isLoading ? (
+          <div className="flex h-full w-full items-center justify-center">
+            Loading
+          </div>
+        ) : (
+          <div className="laptop:grid-cols-3 grid grid-cols-1 gap-4 p-10">
+            {favorites.map((item) => (
+              <div key={item.id}>
+                {/*@ts-ignore*/}
+                <Card product={item.product} />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
-export default FavoritesPage;
+export default FavoritesPage

@@ -1,23 +1,24 @@
-import { Dispatch, FC, MouseEventHandler, SetStateAction } from "react";
-import Search from "../NavBar/Search";
-import { ProductsProps } from "../../models/productsProps";
+import { Link } from "react-router-dom"
+import { IProducts } from "../../models/IProducts"
+import Search from "../Search/Search"
 import { IoClose } from "react-icons/io5";
-import { Link } from "react-router-dom";
 
-interface Props {
-    products: ProductsProps[] | [],
-    closeModal: () => any
+type ISearchModal = {
+    closeModal(): void,
+    products: IProducts[] | [],
 }
 
-export const SearchModal: FC<Props> = (props) => {
+function SearchModal({ closeModal, products }: ISearchModal) {
     return (
-        <dialog className="flex flex-col absolute bg-white whitespace-nowrap justify-end items-end w-10/12 h-5/6 rounded-lg shadow-lg shadow-black border-2 border-solid border-black top-24 z-20">
+        <dialog className="flex flex-col justify-center items-center absolute p-3 
+        bg-white whitespace-nowrap w-10/12 h-5/6 rounded-lg shadow-lg shadow-black
+         border-2 border-solid border-black top-24 z-20">
             <div className="flex flex-row justify-center items-center w-full">
                 <Search isModalSearch={true} />
-                <button onClick={props.closeModal}><IoClose className="text-3xl" /></button>
+                <button onClick={closeModal}><IoClose className="text-3xl ml-3" /></button>
             </div>
-            <ul className="overflow-y-auto overflow-hidden w-full h-full">
-                {props.products.map(innerArray => (
+            <ul className="overflow-y-auto overflow-hidden w-full h-full p-3">
+                {products.map(innerArray => (
                     // @ts-ignore
                     innerArray.map(item => (
                         //@ts-ignore
@@ -31,7 +32,7 @@ export const SearchModal: FC<Props> = (props) => {
                             </div>
                             <div className="flex flex-col laptop:justify-end justify-center laptop:items-end items-center">
                                 <p>{item.price}$</p>
-                                <button onClick={props.closeModal} className="bg-black px-3 py-2 text-white transition duration-200 hover:scale-90"><Link to={`/products/${item.id}`}>See more</Link></button>
+                                <button onClick={closeModal} className="bg-black px-3 py-2 text-white transition duration-200 hover:scale-90"><Link to={`/products/${item.id}`}>See more</Link></button>
                             </div>
                         </div>
                     ))
@@ -40,3 +41,5 @@ export const SearchModal: FC<Props> = (props) => {
         </dialog>
     )
 }
+
+export default SearchModal

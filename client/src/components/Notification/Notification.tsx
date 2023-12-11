@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect } from "react"
 import { HiCheck, HiExclamation, HiX } from "react-icons/hi"
 
 interface Props {

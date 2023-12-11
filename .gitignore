@@ -1,3 +1,5 @@
-/backend
+/backend/
+/vue-sneakers
 /client/node_modules
 /AngularShopApp
+/.idea

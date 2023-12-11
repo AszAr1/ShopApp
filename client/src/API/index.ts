@@ -25,16 +25,3 @@ export const $apiImage = axios.create({
                 : `Bearer ${token}`,
     },
 })
-
-// export function getToken() {
-//     const token = localStorage.getItem('token')
-//     return token
-// }
-
-// export function setTokenToLocalStorage (key:string, token:string):void {
-//     localStorage.setItem(key, JSON.stringify(token))
-// }
-
-// export function removeTokenFromLocalStorage(key:string): void {
-//     localStorage.removeItem(key)
-// }
