@@ -3,7 +3,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField, H
 from .models import Product, OrderItem, Order, CartItem, Favorite
 
 
-class GetID():
+class GetID(): # Don't use as a stand-alone model
     class Meta:
         model = None
 
@@ -40,19 +40,19 @@ class OrderItemSerializer(ModelSerializer, GetID):
 class OrderSerializer(ModelSerializer, GetID):
     price = SerializerMethodField(read_only=True)
     id = SerializerMethodField(read_only=True)
-    
+
     class Meta:
         model = Order
         fields = ['id', 'user', 'order_date', 'status', 'price'] 
-                   
+
     def get_price(self, obj):
         if not hasattr(obj, 'id'):
             return None
         if not isinstance(obj, Order):
             return None
-        
+
         return obj.get_price()
-    
+
 
 class FavoriteSerializer(ModelSerializer, GetID):
     id = SerializerMethodField(read_only=True)    

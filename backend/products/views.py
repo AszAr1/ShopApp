@@ -32,9 +32,9 @@ class MainAPIView(ListAPIView):
     def list(self, request):
         self.queryset = self.filter_queryset(self.queryset)[:int(request.query_params['filter'])] \
             if 'filter' in request.query_params else self.filter_queryset(self.queryset)
-            
+
         return Response(self.get_serializer(self.queryset, many=True).data)  
-        
+
 
 class FavoritesAPIView(ListAPIView, DestroyAPIView):
     queryset = Favorite.objects.all()
@@ -51,7 +51,7 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
         if request.data['product'] is None or request.data['product'] == '' or \
             not Favorite.objects.filter(user=request.user.id, product=request.data['product']).exists():
             return Response(data={'error': 'No such product in favorites'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         Favorite.objects.get(user=request.user.id, product=request.data['product']).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -79,7 +79,7 @@ class AddFavoriteAPIView(CreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
+
 
 class AddCartItemAPIView(CreateAPIView):
     queryset = CartItem.objects.all()
@@ -92,7 +92,7 @@ class AddCartItemAPIView(CreateAPIView):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -108,11 +108,11 @@ class CartAPIView(ListCreateAPIView):
             datum.update({'product': product})
 
         return Response(data=data, status=status.HTTP_200_OK)
-     
+
     def post(self, request):
         if len(CartItem.objects.filter(user=request.user.id)) == 0:
             return Response(data={"error": "No products in cart"}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         order_serializer = OrderSerializer(data={'user': request.user.id})
         order_serializer.is_valid(raise_exception=True)
         order_serializer.save()
@@ -137,11 +137,11 @@ class OrdersAPIView(ListAPIView):
 
     def list(self, request):
         orders = OrderSerializer(self.queryset.filter(user=request.user.id), many=True).data
-        
+
         for order in orders:
             products = [item.product for item in OrderItem.objects.filter(order=order['id'])]
             order['products'] = ProductSerializer(products, many=True, context={'request': request}).data
-            
+
         return Response(orders, status=status.HTTP_200_OK)
 
 
@@ -156,7 +156,7 @@ class HoodiesListAPIView(ListAPIView):
     def list(self, request):
         self.queryset = self.filter_queryset(request, self.get_queryset())
         return Response(self.get_serializer(self.queryset, many=True).data, status=status.HTTP_200_OK)
-    
+
 
 class SneakersListAPIView(ListAPIView):
     queryset = Product.objects.filter(category='Sneakers')
