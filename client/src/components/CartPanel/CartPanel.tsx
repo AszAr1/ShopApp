@@ -36,8 +36,9 @@ function CartPanel() {
           </div>
 
         }
+         <PhonePanelNavMenu/>
       </div>
-      <PhonePanelNavMenu/>
+     
     </div>
   )
 }
