@@ -1,4 +1,3 @@
-import stat
 from rest_framework.mixins import Response, status
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.filters import SearchFilter, OrderingFilter
