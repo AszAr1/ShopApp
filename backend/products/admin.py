@@ -8,7 +8,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    fields = ('customer',)
+    fields = ('user',)
 
 
 class OrderItemAdmin(admin.ModelAdmin):
