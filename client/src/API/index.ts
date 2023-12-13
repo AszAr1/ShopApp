@@ -14,7 +14,7 @@ export const $api = axios.create({
     },
 });
 
-export const $apiImage = axios.create({
+export const $apiUpdateInfo = axios.create({
     baseURL: API_URL,
     headers: {
         "Content-Type": 'multipart/form-data',

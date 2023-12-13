@@ -10,21 +10,28 @@ type CardProps = {
     product: IProducts
 }
 
-function Card({product}: CardProps) {
+function Card({ product }: CardProps) {
     const setFavorites = UseFavorites((state) => state.setFavorite);
     const [showToast, setShowToast] = useState(false);
     const [done, setDone] = useState(false);
 
     function toggleFavorite(productId: string) {
-        console.log(productId);
         FavoritesService.addFavorites(productId)
-            .then(() => {setFavorites();  setDone(true); setShowToast(true);})
-            .catch((e) => {console.error(e); setDone(false); setShowToast(true);});
+            .then(() => {
+                setFavorites();
+                setDone(true);
+                setShowToast(true);
+            })
+            .catch((e) => {
+                console.error(e);
+                setDone(false);
+                setShowToast(true);
+            });
     }
 
     return (
         <>
-        
+
             {showToast && (
                 <Notification
                     negativeDescription="Failed to add favorite."

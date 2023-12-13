@@ -30,8 +30,9 @@ function OrderPanel() {
           ) : (
             <OrderList orders={orders} />
           )}
+          <PhonePanelNavMenu />
         </div>
-        <PhonePanelNavMenu />
+        
       </div>
     </>
   )
