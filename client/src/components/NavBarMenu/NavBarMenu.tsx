@@ -40,29 +40,25 @@ function NavBarMenu({ isOpen, setIsOpen, isAuth }: INavBarMenu) {
 
             <div className={`flex flex-col justify-center items-center ${isAuth ? 'hidden' : 'flex'}`}>
 
-                <button 
+                <Link to="/register" 
                 onClick={setIsOpen}
                 className={`mx-2 w-[150px] text-center px-4 py-3
                 text-black font-mono font-bold
                 bg-white border-2 border-solid border-black rounded-md 
                   duration-200 transition hover:bg-black hover:text-white hover:scale-90`}
                 >
-                    <Link to="/register" >
                         Register
-                    </Link>
-                </button>
+                </Link>
 
-                <button 
+                <Link to= "login" 
                 onClick={setIsOpen}
                 className={`mx-2 w-[150px] text-center px-4 py-3
                 text-black font-mono font-bold
                 bg-white border-2 border-solid border-black rounded-md 
                   duration-200 transition hover:bg-black hover:text-white hover:scale-90`}
                 >
-                    <Link to="/login" >
                         Log In
-                    </Link>
-                </button>
+                </Link>
             </div>
         </div>
 
