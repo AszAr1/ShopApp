@@ -22,7 +22,7 @@ function ChangeNameImgForm() {
             const formData = new FormData();
             formData.append("profile_picture", file);
             formData.append("username", newUsername);
-            const response = await $apiUpdateInfo.patch(`profile/${username}/`, formData)
+            await $apiUpdateInfo.patch(`profile/${username}/`, formData)
             
         } catch (error) {
             console.log(error)
