@@ -20,7 +20,7 @@ export class AuthService {
 
         } catch (e){
 
-            throw e;
+            console.log(e);
 
         }
     }
