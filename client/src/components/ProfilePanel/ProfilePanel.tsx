@@ -7,10 +7,6 @@ import ChangeNameImgForm from '../ChangeNameImgForm/ChangeNameImgForm';
 function ProfilePanel() {
     const user = UseUser((state) => state.user);
 
-    
-
-    
-
     return (
         <>
             <div className="flex flex-row h-screen w-screen justify-start items-center">
@@ -33,7 +29,9 @@ function ProfilePanel() {
                     <ChangeNameImgForm/>                    
 
                     <div className="laptop:col-span-2 laptop:p-10 flex laptop:flex-row flex-col items-center justify-center rounded-md border-2 border-solid border-black p-2 shadow-xl">
+                        
                         <ChangeSecureDataForm/>
+
                         <div className='p-3 border-2 mx-6 laptop:mt-0 mt-5 flex items-center justify-center text-4xl border-black rounded-md w-full h-full'>
                             (◕‿◕)
                         </div>
