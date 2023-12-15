@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { $apiUpdateInfo } from "../../api";
-import sha256 from 'crypto-js/sha256';
+// import sha256 from 'crypto-js/sha256';
 
 function ChangeSecureDataForm() {
 
@@ -10,11 +10,10 @@ function ChangeSecureDataForm() {
     const HandleUpdateSecureData = async () => {
         try {
 
-            const hashPassword = sha256(password).toString();
             const username = localStorage.getItem('username');
             const formData = new FormData();
             formData.append("email", email);
-            formData.append("password", hashPassword);
+            formData.append("password", password);
             const response = await $apiUpdateInfo.patch(`profile/${username}/`, formData);
 
             console.log("Secure was uploaded", response.data);

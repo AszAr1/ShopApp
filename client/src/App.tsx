@@ -11,7 +11,6 @@ import OrdersPage from "./pages/OrdersPage/OrdersPage";
 import { UseUser } from "./stores/UseUser";
 import { AuthService } from "./services/auth.service";
 import { useEffect } from "react";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import FavoritesPage from "./pages/FavoritesPage/FavoritesPage";
 import CartPage from "./pages/CartPage/CartPage";
 import SuccessfullyPage from "./pages/SuccessfullyPage/SuccessfullyPage";
@@ -66,7 +65,6 @@ function App() {
           //FavoritesPage
           <Route path="favorites" element={<FavoritesPage />} />
           //ProfilePage
-          <Route path="profile" element={<ProfilePage />} />
           <Route path='/profile/order-panel' element={<OrderPanel />} />
           <Route path='/profile/profile-panel' element={<ProfilePanel />} />
           <Route path='/profile/cart-panel' element={<CartPanel />} />

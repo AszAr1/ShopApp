@@ -25,7 +25,7 @@ export const NavLinks = [
     {
         id: 4,
         title: "Profile",
-        link: "profile",
+        link: "profile/profile-panel",
         icon: <CgProfile />,
     },
 ]

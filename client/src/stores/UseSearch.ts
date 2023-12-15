@@ -20,7 +20,6 @@ export const UseSearch = create<IUseSearch>((set) => ({
     async findProducts(request) {
        try {
         const response = await SearcService.search(request)
-        console.log(response.data)
         set({products: [response.data]})
        } catch (error) {
         console.log(error)
