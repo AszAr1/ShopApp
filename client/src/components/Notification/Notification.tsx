@@ -19,7 +19,7 @@ export const Notification:FC<Props> = ({negativeDescription, positiveDescription
     }, []); 
     return (
         <>
-            <div className={`fixed z-20 top-20 laptop:w-1/5 w-56 flex justify-between items-center p-3
+            <div className={`fixed z-50 top-20 laptop:w-1/5 w-56 flex justify-between items-center p-3
              bg-white rounded-md border-2 border-solid border-black`}>
                      <div 
                      className={`mr-4 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg 

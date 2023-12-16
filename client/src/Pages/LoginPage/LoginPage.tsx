@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { UseUser } from '../../stores/UseUser';
 import { useNavigate } from 'react-router-dom';
 import Form from '../../components/Form/Form'
 import { AuthService } from '../../services/auth.service';
 import { Notification } from '../../components/Notification/Notification';
 
+
 function LoginPage() {
 
     const login = UseUser((state) => state.loginUser);
     const navigate = useNavigate();
-    const loginService = AuthService.login;
     const [showToast, setShowToast] = useState(false);
+    const [done, setDone] = useState(false);
 
     const handleClickLogin = async (
         name: string,
@@ -18,12 +19,14 @@ function LoginPage() {
         password: string,
     ) => {
         try {
-            const data = await loginService(name, password);
+            const data = await AuthService.login(name, password);
             if (data) {
                 login(data.data.user);
                 navigate("/");
             }
         } catch (error) {
+            console.log(error)
+            setDone(false);
             setShowToast(true);
         }
     };
@@ -31,7 +34,9 @@ function LoginPage() {
         <>
             {showToast && (
                 <Notification
+                    done={done}
                     negativeDescription="Auth failed. Please check your password or username."
+                    positiveDescription="successfully ˆ_ˆ"
                     setShowToast={setShowToast}
                 />
             )}

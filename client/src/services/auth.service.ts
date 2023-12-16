@@ -43,7 +43,6 @@ export class AuthService {
             return response;
         } catch (error) {
             console.error("Registration error:", error);
-            throw error;
         }
     }
 
