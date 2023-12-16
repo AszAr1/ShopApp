@@ -37,6 +37,8 @@ class CustomUserRegistrationAPIView(CreateAPIView):
 
 
 class CustomUserAuthorizationAPIView(TokenObtainPairView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         if not 'username' in request.data.keys():
             return Response(data={"error": 'No user with this username'}, status=status.HTTP_404_NOT_FOUND)
@@ -59,6 +61,17 @@ class CustomUserProfileAPIView(RetrieveUpdateAPIView):
     lookup_field = 'username'
     parser_classes = [MultiPartParser, FormParser]
 
+    def patch(self, request, *args, **kwargs):
+        data = request.data.copy()
+        if 'password' in request.data.keys():
+           data['password'] = make_password(data['password']) 
+
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+        
 
 class CustomUserAPIView(ListAPIView):
     queryset = CustomUser.objects.all()
