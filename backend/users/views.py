@@ -1,5 +1,6 @@
+from distutils.sysconfig import customize_compiler
 from django.contrib.auth.hashers import make_password
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, ListAPIView 
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, UpdateAPIView, ListAPIView 
 from rest_framework.mixins import Response, status
 from rest_framework.permissions import AllowAny
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -59,18 +60,25 @@ class CustomUserProfileAPIView(RetrieveUpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     lookup_field = 'username'
-    parser_classes = [MultiPartParser, FormParser]
 
     def patch(self, request, *args, **kwargs):
         data = request.data.copy()
         if 'password' in request.data.keys():
            data['password'] = make_password(data['password']) 
-
+        print(data)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        print(serializer.data)
         return Response(serializer.data)
+    
+
+class ChangeProfilePictureAPIView(UpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [AllowAny]
         
 
 class CustomUserAPIView(ListAPIView):
