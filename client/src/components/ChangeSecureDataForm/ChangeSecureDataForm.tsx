@@ -13,11 +13,8 @@ function ChangeSecureDataForm() {
   const HandleUpdateSecureData = async () => {
     try {
       const username = localStorage.getItem("username");
-      const formData = new FormData();
-      if (email === "") {
-        setEmail(String(userEmail));
-      }
-      formData.append("email", email);
+      const formData = new FormData();  
+      email === "" ? formData.append("email", String(userEmail)) : formData.append("password", email);
       formData.append("password", password);
       await $apiUpdateInfo.patch(`profile/${username}/`, formData);
     } catch (error) {
@@ -61,7 +58,7 @@ function ChangeSecureDataForm() {
           <button
             onClick={HandleUpdateSecureData}
             className="mt-5 border-2 border-solid border-black bg-black
-                                    p-2 font-mono font-semibold text-white transition duration-300 hover:bg-white hover:text-black"
+            p-2 font-mono font-semibold text-white transition duration-300 hover:bg-white hover:text-black"
           >
             Change secure data
           </button>
