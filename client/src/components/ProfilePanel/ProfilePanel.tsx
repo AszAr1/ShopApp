@@ -1,8 +1,8 @@
 import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import { UseUser } from '../../stores/UseUser';
 import PhonePanelNavMenu from '../PhonePanelNavMenu/PhonePanelNavMenu';
-import ChangeSecureDataForm from '../ChangeSecureDataForm/ChangeSecureDataForm';
-import ChangeNameImgForm from '../ChangeNameImgForm/ChangeNameImgForm';
+import ChangeSecureDataForm from '../ChangeDataForm/ChangeDataForm';
+import ChangeNameImgForm from '../ChangeImgForm/ChangeImgForm';
 
 function ProfilePanel() {
     const user = UseUser((state) => state.user);
@@ -28,7 +28,7 @@ function ProfilePanel() {
 
                     <ChangeNameImgForm/>                    
 
-                    <div className="laptop:col-span-2 laptop:p-10 flex laptop:flex-row flex-col items-center justify-center rounded-md border-2 border-solid border-black p-2 shadow-xl">
+                    <div className="laptop:col-span-2 laptop:p-10 flex h-[400px] laptop:flex-row flex-col items-center justify-center rounded-md border-2 border-solid border-black p-2 shadow-xl">
                         
                         <ChangeSecureDataForm/>
 
