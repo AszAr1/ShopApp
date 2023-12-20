@@ -1,3 +1,5 @@
+from urllib import request
+from rest_framework.request import Request
 from rest_framework.mixins import Response, status
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -47,8 +49,8 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
 
         return Response(data=data)
     
-    def delete(self, request):
-        if request.data['product'] is None or request.data['product'] == '' or \
+    def delete(self, request: Request):
+        if 'product' in request.data.keys() or request.data['product'] == '' or \
             not Favorite.objects.filter(user=request.user.id, product=request.data['product']).exists():
             return Response(data={'error': 'No such product in favorites'}, status=status.HTTP_404_NOT_FOUND)
 
