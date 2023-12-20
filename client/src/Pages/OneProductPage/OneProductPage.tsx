@@ -74,7 +74,7 @@ function OneProductPage() {
                                 *Размер(EUR)
                             </h1>
 
-                            <div className={`tablet:grid-cols-10 laptop:gap-3 mx-0 grid grid-cols-5 gap-4`} >
+                            <div className={`tablet:grid-cols-10 laptop:gap-3 mx-0 grid grid-cols-5 gap-1`} >
                                 <SizesList sizes={sneaker.sizes} />
                             </div>
                         </div>

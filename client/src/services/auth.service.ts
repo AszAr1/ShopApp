@@ -3,6 +3,7 @@ import { $api } from "../api";
 import { AuthResponse, IUser } from "../models/IAuthResponse";
 
 export class AuthService {
+
     static async login( username: string, password: string): Promise<AxiosResponse<AuthResponse>> {
 
         const user = {

@@ -42,7 +42,7 @@ function FavoritesPage() {
             {favorites.map((item) => (
               <div key={item.id}>
                 {/*@ts-ignore*/}
-                <Card product={item.product} />
+                <Card product={item.product} isFavoritesPage={true}/>
               </div>
             ))}
           </div>

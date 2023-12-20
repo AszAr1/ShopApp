@@ -24,7 +24,6 @@ function RegisterPage() {
             setDone(true);
             setShowToast(true);
         } catch (error) {
-            console.error("Registration click error:", error);
             setDone(false)
             setShowToast(true);
         }

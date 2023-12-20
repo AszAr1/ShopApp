@@ -16,8 +16,10 @@ function ChangeDataForm() {
       const username = localStorage.getItem("username");
       const formData = new FormData();
       newName === "" ? formData.append("username", String(username)) : formData.append("username", newName); 
-      email === "" ? formData.append("email", String(userEmail)) : formData.append("password", email);
-      formData.append("password", password);
+      email === "" ? formData.append("email", String(userEmail)) : formData.append("email", email);
+      if (password != ""){
+        formData.append("password", password)
+      }
       await $apiUpdateInfo.patch(`profile/${username}/`, formData);
     } catch (error) {
       setDone(false);

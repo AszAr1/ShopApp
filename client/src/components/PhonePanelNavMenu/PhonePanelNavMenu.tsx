@@ -18,15 +18,9 @@ function PhonePanelNavMenu() {
 
     return (
         <>
-            <div>
-                <button
-                    onClick={e => HandleClick(e)}
-                    className="laptop:hidden flex justify-center items-center w-full bg-black text-white rounded-md px-4 py-3">
-                    (◕‿◕)
-                </button>
-                {openModal &&
+            {openModal &&
                     <dialog
-                        className={`flex flex-col justify-center items-center mt-5 p-8 border-2 border-solid border-black rounded-md `}>
+                        className={`absolute mt-[630px] flex flex-col justify-center items-center p-8 border-2 border-solid border-black rounded-md `}>
                         <button
                             onClick={() => HandleRedirect("profile-panel")}
                             className={`flex justify-center items-center w-[200px] rounded-lg my-2 bg-black text-white px-3 py-2`}
@@ -41,6 +35,14 @@ function PhonePanelNavMenu() {
                         >Cart</button>
                     </dialog>
                 }
+
+            <div>
+
+                <button
+                    onClick={e => HandleClick(e)}
+                    className="laptop:hidden flex justify-center items-center w-full bg-black text-white rounded-md px-4 py-3">
+                    (◕‿◕)
+                </button>
             </div>
 
         </>

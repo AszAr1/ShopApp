@@ -56,6 +56,7 @@ function SettingsPanel() {
                         Log Out
                     </button>
                 </div>
+                
             </div>
         </>
     )

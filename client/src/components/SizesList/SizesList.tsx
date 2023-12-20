@@ -25,7 +25,7 @@ function SizesList({sizes}: ISizesList) {
                     onClick={() => handleClick(index)}
                     className={`${
                         activeSizes[index] ? "bg-red-200" : "bg-sky-100"
-                    } p-3 hover:bg-red-200 cursor-pointer`}
+                    } p-3 hover:bg-red-200 cursor-pointer flex justify-center items-center`}
                 >
                     {size}
                 </div>

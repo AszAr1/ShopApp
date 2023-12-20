@@ -20,9 +20,6 @@ function HomeIntro() {
                         <h1 className="laptop:text-6xl laptop:py-10 py-4 text-center text-3xl font-bold uppercase text-white">
                             You can show all you need
                         </h1>
-                        <button className="laptop:px-4 laptop:py-2 flex items-center justify-center rounded-md bg-white p-2 text-lg font-bold text-black transition duration-500 hover:scale-110 ">
-                            Show more
-                        </button>
                     </div>
                 </div>
             </div>

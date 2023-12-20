@@ -12,15 +12,13 @@ function ProfilePage() {
     setOpenModal(prev => !prev);
   }
 
-  // function HandleOpenPanel(component: string) {
-  //   navigate(`/profile/${component}`)
-  //   setOpenModal(false);
-  // }
   
   return (
     <>
       <div className={"flex h-screen w-full items-start justify-center"}>
+
         <SettingsPanel />
+
         <div className="flex flex-col h-full w-full items-center justify-center">
           <h1 className={`font-mono text-7xl laptop:flex hidden`}>(◕‿◕)</h1>
           <button

@@ -8,9 +8,10 @@ import { AiOutlineStar } from "react-icons/ai";
 
 type CardProps = {
     product: IProducts
+    isFavoritesPage?: boolean
 }
 
-function Card({ product }: CardProps) {
+function Card({ product, isFavoritesPage }: CardProps) {
     const setFavorites = UseFavorites((state) => state.setFavorite);
     const [showToast, setShowToast] = useState(false);
     const [done, setDone] = useState(false);
@@ -18,7 +19,7 @@ function Card({ product }: CardProps) {
     function toggleFavorite(productId: string) {
         FavoritesService.addFavorites(productId)
             .then(() => {
-                setFavorites();
+                // setFavorites();
                 setDone(true);
                 setShowToast(true);
             })
@@ -27,6 +28,22 @@ function Card({ product }: CardProps) {
                 setDone(false);
                 setShowToast(true);
             });
+    }
+
+    function deleteFromFavorites (productId: string) {
+        FavoritesService.removeFavorites(productId)
+        .then(() => {
+            setFavorites()
+            setDone(true)
+            setShowToast(true)
+        })
+        .catch(
+            e => {
+                console.log(e)
+                setDone(false);
+                setShowToast(true);
+            }
+        )
     }
 
     return (
@@ -76,10 +93,11 @@ function Card({ product }: CardProps) {
                         className="mt-5 border-2 border-black bg-black px-3 py-2 font-bold text-white shadow-md
                              transition duration-500 hover:bg-white hover:text-black
                         "
-                        onClick={() => toggleFavorite(product.id)}
+                        onClick={() => {isFavoritesPage ? deleteFromFavorites(product.id) : toggleFavorite(product.id)}}
                     >
                         <AiOutlineStar className="text-2xl font-bold" />
                     </button>
+                    
 
                 </div>
 

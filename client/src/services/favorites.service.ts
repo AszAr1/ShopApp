@@ -16,7 +16,10 @@ export class FavoritesService {
         return $api.get(`/favorites/`);
     }
 
-    static async removeFavorites() {
-        return $api.delete(`/favorites/`);
+    static async removeFavorites(productId: string) {
+        const product = {
+            "product": productId
+        }
+        return $api.delete(`/favorites/`, product );
     }
 }
