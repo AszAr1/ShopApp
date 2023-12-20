@@ -19,7 +19,7 @@ class CustomUserRegistrationAPIView(CreateAPIView):
     def create(self, request):
         data = request.data.copy()
         data['password'] = make_password(request.data['password'])
-        serializer = CustomUserSerializer(data=data)
+        serializer = CustomUserSerializer(data=data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         headers = self.get_success_headers(serializer.data)
