@@ -3,7 +3,8 @@ import { $apiUpdateInfo } from "../../api";
 import { UseUser } from "../../stores/UseUser";
 import { Notification } from "../Notification/Notification";
 
-function ChangeSecureDataForm() {
+function ChangeDataForm() {
+  const [newName, setNewName] = useState<string>("")
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const userEmail = UseUser((state) => state.user.email);
@@ -13,7 +14,8 @@ function ChangeSecureDataForm() {
   const HandleUpdateSecureData = async () => {
     try {
       const username = localStorage.getItem("username");
-      const formData = new FormData();  
+      const formData = new FormData();
+      newName === "" ? formData.append("username", String(username)) : formData.append("username", newName); 
       email === "" ? formData.append("email", String(userEmail)) : formData.append("password", email);
       formData.append("password", password);
       await $apiUpdateInfo.patch(`profile/${username}/`, formData);
@@ -33,8 +35,17 @@ function ChangeSecureDataForm() {
           done={done}
         />
       )}
-      <div className="laptop:items-center w-full h-full flex flex-col items-center justify-center border-2 border-solid rounded-md border-black p-3">
-        <form>
+        <form className="laptop:items-center w-full h-full flex flex-col items-center justify-center border-2 border-solid rounded-md border-black p-3">
+        <div>
+            <h1>Change name</h1>
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              className="p-2 outline-none border-b-2 border-solid border-black"
+              placeholder="New name"
+            />
+          </div>
           <div>
             <h1>Change email</h1>
             <input
@@ -60,12 +71,11 @@ function ChangeSecureDataForm() {
             className="mt-5 border-2 border-solid border-black bg-black
             p-2 font-mono font-semibold text-white transition duration-300 hover:bg-white hover:text-black"
           >
-            Change secure data
+            Change data
           </button>
         </form>
-      </div>
     </>
   );
 }
 
-export default ChangeSecureDataForm;
+export default ChangeDataForm;
