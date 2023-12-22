@@ -36,6 +36,7 @@ function CartPanel() {
       <div className="laptop:p-0 p-5 flex laptop:flex-row flex-col justify-start items-center w-full h-full">
         <SettingsPanel />
         <div className="w-full h-full mx-5">
+          <PhonePanelNavMenu />
           {cart.length === 0 ? (
             <NoItems title="cart" />
           ) : (
@@ -48,7 +49,6 @@ function CartPanel() {
               ))}
             </div>
           )}
-          <PhonePanelNavMenu />
         </div>
       </div>
     </>

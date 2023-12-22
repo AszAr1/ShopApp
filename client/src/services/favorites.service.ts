@@ -20,6 +20,6 @@ export class FavoritesService {
         const product = {
             "product": productId
         }
-        return $api.delete(`/favorites/`, product );
+        return $api.delete(`/favorites/`, {data: product} );
     }
 }

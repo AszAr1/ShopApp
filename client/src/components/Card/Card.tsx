@@ -31,6 +31,7 @@ function Card({ product, isFavoritesPage }: CardProps) {
     }
 
     function deleteFromFavorites (productId: string) {
+        console.log(productId)
         FavoritesService.removeFavorites(productId)
         .then(() => {
             setFavorites()
