@@ -1,4 +1,3 @@
-from urllib import request
 from rest_framework.request import Request
 from rest_framework.mixins import Response, status
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
@@ -50,7 +49,8 @@ class FavoritesAPIView(ListAPIView, DestroyAPIView):
         return Response(data=data)
     
     def delete(self, request: Request):
-        if 'product' in request.data.keys() or request.data['product'] == '' or \
+        print(request.data)
+        if not 'product' in request.data.keys() or \
             not Favorite.objects.filter(user=request.user.id, product=request.data['product']).exists():
             return Response(data={'error': 'No such product in favorites'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -76,9 +76,9 @@ class AddFavoriteAPIView(CreateAPIView):
         if Favorite.objects.filter(user=data['user'], product=data['product']).exists():
             return Response(data={"error": "This product is already in Favorites"}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.get_serializer(data=data)
+        serializer = FavoriteSerializer(data=data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        serializer.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
