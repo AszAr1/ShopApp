@@ -9,13 +9,12 @@ function ProfilePanel() {
 
     return (
         <>
-            <div className="grid laptop:grid-cols-3 grid-cols-1 gap-16 h-full w-full">
+            <div className="flex laptop:flex-row flex-col justify-start items-start h-full w-full p-6">
 
                 <SettingsPanel />
-
-                <div className="laptop:grid-cols-2 laptop:gap-3 grid w-full grid-cols-1 col-span-2 gap-4 p-2">
-
                 <PhonePanelNavMenu />
+
+                <div className="grid laptop:grid-cols-2 laptop:gap-3 w-full grid-cols-1 gap-4 p-2">
 
                     <div className="laptop:p-10 flex items-center justify-center rounded-md border-2 border-solid border-black p-2 shadow-xl">
                         <div className="flex flex-col items-center justify-center">
@@ -28,9 +27,9 @@ function ProfilePanel() {
                             <h1 className="font-mono">Name: {user.username}</h1>
                             <h1 className="font-mono">Email: {user.email}</h1>
                         </div>
-                    </div>
+                    </div>        
 
-                    <ChangeNameImgForm/>                    
+                    <ChangeNameImgForm/>            
 
                     <div className="laptop:col-span-2 laptop:p-10 flex h-[400px] laptop:flex-row flex-col items-center justify-center rounded-md border-2 border-solid border-black p-2 shadow-xl">
                         

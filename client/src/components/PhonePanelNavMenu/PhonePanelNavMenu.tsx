@@ -40,7 +40,7 @@ function PhonePanelNavMenu() {
 
                 <button
                     onClick={e => HandleClick(e)}
-                    className="laptop:hidden flex justify-center items-center w-full bg-black text-white rounded-md px-4 py-3">
+                    className="laptop:hidden flex justify-center items-center w-full my-3 bg-black text-white rounded-md px-4 py-3">
                     (◕‿◕)
                 </button>
 
