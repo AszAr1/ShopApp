@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import SettingsPanel from '../SettingsPanel/SettingsPanel'
 import { IProducts } from '../../models/IProducts'
 import { OrdersService } from '../../services/orders.service'
 import OrderList from '../OrderList/OrderList'
 import NoItems from '../NoItems/NoItems'
 import PhonePanelNavMenu from '../PhonePanelNavMenu/PhonePanelNavMenu'
 import { Notification } from '../Notification/Notification'
+import SettingsPanel from '../SettingsPanel/SettingsPanel'
 
 function OrderPanel() {
 
@@ -37,16 +37,17 @@ function OrderPanel() {
         />
       )}
       <div className="flex laptop:flex-row flex-col h-full w-full items-center justify-start laptop:p-0 p-5">
-        <SettingsPanel />
+
+        < SettingsPanel />
+
         <div className='mx-5 w-full'>
+          <PhonePanelNavMenu />
           {orders.length === 0 ? (
             <NoItems title="order" />
           ) : (
             <OrderList orders={orders} />
           )}
-          <PhonePanelNavMenu />
         </div>
-        
       </div>
     </>
   )

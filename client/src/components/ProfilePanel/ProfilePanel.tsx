@@ -10,9 +10,12 @@ function ProfilePanel() {
     return (
         <>
             <div className="grid laptop:grid-cols-3 grid-cols-1 gap-16 h-full w-full">
+
                 <SettingsPanel />
 
                 <div className="laptop:grid-cols-2 laptop:gap-3 grid w-full grid-cols-1 col-span-2 gap-4 p-2">
+
+                <PhonePanelNavMenu />
 
                     <div className="laptop:p-10 flex items-center justify-center rounded-md border-2 border-solid border-black p-2 shadow-xl">
                         <div className="flex flex-col items-center justify-center">
@@ -37,8 +40,6 @@ function ProfilePanel() {
                             (◕‿◕)
                         </div>
                     </div>
-
-                    <PhonePanelNavMenu />
 
                 </div>
             </div>
