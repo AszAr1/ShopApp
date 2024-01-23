@@ -3,7 +3,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField, H
 from .models import Product, OrderItem, Order, CartItem, Favorite
 
 
-class GetID(): # Don't use as a stand-alone model
+class GetID: # Don't use as a stand-alone object
     class Meta:
         model = None
 

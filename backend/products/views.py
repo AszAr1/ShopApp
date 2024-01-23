@@ -119,12 +119,15 @@ class CartAPIView(ListCreateAPIView):
         order_serializer.is_valid(raise_exception=True)
         order_serializer.save()
         headers = self.get_success_headers(order_serializer.validated_data)
-        order_id = Order.objects.filter(user=request.user.id).last().id
-        cart_items = CartItem.objects.filter(user=request.user.id)
 
-        for item in cart_items:
-            item_data = {"product": item.product.id, 'quantity': item.quantity, 'order': order_id}
-            order_item_serializer = OrderItemSerializer(data=item_data)
+        for item in (cart_items := CartItem.objects.filter(user=request.user.id)):
+            order_item_serializer = OrderItemSerializer(
+                data={
+                    "product": item.product.id, 
+                    'quantity': item.quantity, 
+                    'order': order_serializer.data['id']
+                }
+            )
             order_item_serializer.is_valid(raise_exception=True)
             order_item_serializer.save()
 
